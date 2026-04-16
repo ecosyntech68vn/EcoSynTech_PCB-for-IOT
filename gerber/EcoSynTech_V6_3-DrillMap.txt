@@ -1,0 +1,18 @@
+G04 EcoSynTech PCB v6.3 - Drill Map*
+G04 This file describes drill sizes and counts*
+G04 Board: 200mm x 150mm | 2-Layer*
+%FSLAX4Y4*%
+%MOIN*%
+; Drill report
+; ===========
+; Drill Type: PTH (Plated Through Hole)
+; Non-plated: M3 mounting holes
+; ===========
+; Tool | Diameter (mm) | Count | Type
+; T1    | 0.30           | 50    | PTH Via
+; T2    | 0.80           | 12    | PTH Via (Power)
+; T3    | 0.80           | 40    | PTH Pad (SMD)
+; T4    | 1.00           | 30    | PTH Pad (THT)
+; T5    | 1.60           | 16    | PTH Pad (Relay/Terminal)
+; T6    | 3.20           | 4     | NPTH (Mounting Hole M3)
+M02*
