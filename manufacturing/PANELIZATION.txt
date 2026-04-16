@@ -8,8 +8,9 @@ PANELIZATION OPTIONS:
 ====================
 
 Option 1: Single Board (No Panelization)
-  - Use this if ordering small quantities (1-5 boards)
+  - Use this if ordering small quantities (1-10 boards)
   - Route individual boards from panel
+  - Recommended for first production run
 
 Option 2: Array Panel (Recommended for 10 boards)
   - Panel size: 410mm x 310mm (fits standard fab capabilities)
@@ -18,21 +19,21 @@ Option 2: Array Panel (Recommended for 10 boards)
   - Tab width: 3mm, spacing: 1.5mm
   - Fiducials: 3 per board, 6 per panel
 
-Panel Layout (410mm x 310mm):
-  +---------------------------+
-  |  [200x150]  |  [200x150]  |
-  |   Board 1  |   Board 2   |
-  |-------------+-------------|
-  |  [200x150]  |  [200x150]  |
-  |   Board 3  |   Board 4   |
-  +---------------------------+
-  (Tab routes between all boards)
+  Panel Layout (410mm x 310mm):
+    +---------------------------+
+    |  [200x150]  |  [200x150]  |
+    |   Board 1  |   Board 2   |
+    |-------------+-------------|
+    |  [200x150]  |  [200x150]  |
+    |   Board 3  |   Board 4   |
+    +---------------------------+
+    (Tab routes between all boards)
 
-  Board spacing: 5mm between boards (routing clearance)
-  
-  Fiducial positions on panel:
-    - Panel corners: 10mm from edge
-    - Between boards: center of tab routes
+    Board spacing: 5mm between boards (routing clearance)
+    
+    Fiducial positions on panel:
+      - Panel corners: 10mm from edge
+      - Between boards: center of tab routes
 
 Option 3: V-Score Panel
   - Score lines between boards (no tabs)
