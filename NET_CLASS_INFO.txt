@@ -1,0 +1,18 @@
+NET CLASSES FOR MANUFACTURING
+=============================
+
+Class: Default
+  Track width: 0.25mm
+  Via diameter: 0.6mm, drill: 0.3mm
+  Clearance: 0.2mm
+
+Class: Power
+  Track width: 1.0mm
+  Via diameter: 0.8mm, drill: 0.4mm
+  Clearance: 0.4mm
+
+Class: HighVoltage
+  Track width: 0.6mm
+  Via diameter: 0.6mm, drill: 0.3mm
+  Clearance: 0.4mm
+

@@ -1,0 +1,104 @@
+================================================================================
+EcoSynTech PCB v6.3 — LAYER STACKUP
+================================================================================
+
+Board: 200mm x 150mm x 1.6mm | 2 Copper Layers | ENIG Finish
+
+DETAILED LAYER STACKUP (from top to bottom):
+==============================================
+
+Layer 1: Top Silkscreen (White)
+  - Ink: White epoxy, 20-30μm thickness
+  - Contents: Reference designators, logos, warnings
+  - Drying: Thermal cure
+
+Layer 2: Top Solder Mask (Green LPI)
+  - Material: Green LPI (photosensitive)
+  - Thickness: 18-25μm (after cure)
+  - Opening tolerance: +0.05mm per side
+  - Coverage: Both sides (top and bottom)
+
+Layer 3: Top Copper (F.Cu) — 35μm (1 oz)
+  - Material: Electrolytic copper foil
+  - Thickness: 35μm (1.37 mil)
+  - NOTE: Use 70μm (2 oz) for areas under relay section
+  - Min trace width: 0.15mm (signal), 0.25mm (default)
+  - Min spacing: 0.2mm (default), 0.4mm (HV)
+
+Layer 4: Prepreg / Dielectric
+  - Material: FR-4 prepreg (106/1080)
+  - Thickness: 1.1mm (composite of 7628 + 1080)
+  - Dk (dielectric constant): 4.5 @ 1MHz
+  - Df (dissipation factor): 0.02 @ 1MHz
+  - Tg: ≥ 130°C (high-Tg FR-4 mandatory)
+
+Layer 5: Bottom Copper (B.Cu) — 35μm (1 oz)
+  - Material: Electrolytic copper foil
+  - Thickness: 35μm (1.37 mil)
+  - **IMPORTANT: Use 70μm (2 oz) for relay area traces**
+  - Min trace width: 0.15mm
+  - Via stitching to top GND plane
+
+Layer 6: Bottom Solder Mask (Green LPI)
+  - Material: Green LPI (photosensitive)
+  - Thickness: 18-25μm (after cure)
+  - Vias: Open (NOT tented — must be solderable)
+
+Layer 7: Bottom Silkscreen (White) — Optional
+  - Usually not applied for 2-layer boards
+  - If applied: same as top silkscreen
+
+Layer 8: ENIG Surface Finish (Top + Bottom)
+  - Nickel: 3-6μm (electroless nickel)
+  - Gold: 0.05-0.1μm (immersion gold)
+  - Total finish thickness: 3-6.1μm
+
+BOARD CROSS-SECTION SUMMARY:
+==========================
+  Top Silkscreen (White):    ~0.02mm
+  Top Solder Mask:           ~0.02mm
+  Top Copper:                ~0.035mm (1oz)
+  FR-4 Core:                ~1.56mm
+  Bottom Copper:            ~0.035mm (1oz)
+  Bottom Solder Mask:        ~0.02mm
+  ENIG Finish:              ~0.005mm
+  ==========================
+  Total:                    ~1.67mm (±5%)
+
+IMPORTANT NOTES:
+================
+1. ALL PADS must receive ENIG finish — NO HASL
+2. Bottom copper under relay section (right side, bottom rows): use 2 oz copper
+3. Vias must be open (not tented) for solderability
+4. Board must pass 100% E-test before delivery
+5. FR-4 Tg ≥ 130°C is MANDATORY (industrial/ outdoor use)
+
+DETAILED ZONE ALLOCATION ON BOARD:
+==================================
+  Zone A (top-left, 0-60mm x 0-80mm):
+    Power input, protection, 12V rails
+    Heavy copper 1mm traces for 12V power
+    TVS, MOV, GDT components
+  
+  Zone B (top-center, 60-120mm x 0-80mm):
+    Buck regulators (MP1584 x2)
+    +5V and +3V3 power rails
+    Heavy copper for power distribution
+  
+  Zone C (top-right, 120-200mm x 0-80mm):
+    ESP32 module area
+    USB-UART, Watchdog
+    I2C peripherals
+    Antenna keepout zone (15mm radius)
+  
+  Zone D (bottom, 0-200mm x 80-145mm):
+    RELAY SECTION — HIGH VOLTAGE ZONE
+    4x relay sockets, relay drivers
+    DANGER: 220VAC relay contacts
+    SLOT/CUTOUT required between Zone D and Zones A/B/C
+    Minimum HV clearance: 6mm from relay contacts to LV circuitry
+    Bottom copper: 2 oz recommended under relay drivers
+
+================================================================================
+END OF LAYER STACKUP
+================================================================================

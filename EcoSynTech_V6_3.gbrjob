@@ -1,0 +1,90 @@
+{
+  "Header": {
+    "GenerationSoftware": {
+      "Vendor": "EcoSynTech Global",
+      "Application": "KiCad Manufacturing Generator",
+      "Version": "1.0"
+    },
+    "CreationDate": "2026-04-16T00:00:00+00:00",
+    "ProjectId": {
+      "Id": "EcoSynTech_PCB_v6.3",
+      "GUID": "B1C2D3E4-F5A6-7890-ABCD-EF1234567890",
+      "Name": "EcoSynTech PCB v6.3",
+      "Revision": "6.3 Final"
+    }
+  },
+  "Board": {
+    "Id": "0",
+    "Name": "EcoSynTech PCB v6.3",
+    "Revision": "6.3 Final",
+    "SourceFiles": {
+      "GERBER": "EcoSynTech_V6_3_F.Cu.gbr",
+      "DRILL": "EcoSynTech_V6_3-Plated.Txt",
+      "EDA": "EcoSynTech_V6_3_Final.kicad_pcb"
+    },
+    "NumberOfLayers": 2,
+    "Thickness": 1.6,
+    "ThicknessUnit": "mm",
+    "OuterDimensionX": 200.0,
+    "OuterDimensionY": 150.0,
+    "DimensionUnit": "mm"
+  },
+  "DesignRules": {
+    "Layers": {
+      "Top": {
+        "LayerNumber": 1,
+        "LayerName": "F.Cu",
+        "Plot": true,
+        "PowerRailConnections": ["+12V_PROTECTED", "+5V_MAIN", "+3V3_ESP", "+3V3_ANA"]
+      },
+      "Bottom": {
+        "LayerNumber": 2,
+        "LayerName": "B.Cu",
+        "Plot": true,
+        "PowerRailConnections": ["GND_STAR"]
+      }
+    },
+    "MinimumLineWidth": 0.15,
+    "MinimumAnnularRing": 0.15,
+    "MinimumSolderMaskClearance": 0.05,
+    "Vias": {
+      "Plated": true,
+      "DrillFinishedSize": 0.3,
+      "OuterDiameter": 0.6
+    }
+  },
+  "FilesAttributes": {
+    "Gerber": {
+      "Files": [
+        {"Name": "EcoSynTech_V6_3_F.Cu.gbr", "Function": "CopperL1", "Polarities": "Positive"},
+        {"Name": "EcoSynTech_V6_3_B.Cu.gbr", "Function": "CopperL2", "Polarities": "Positive"},
+        {"Name": "EcoSynTech_V6_3_F.Mask.gbr", "Function": "SoldermaskTop", "Polarities": "Negative"},
+        {"Name": "EcoSynTech_V6_3_B.Mask.gbr", "Function": "SoldermaskBot", "Polarities": "Negative"},
+        {"Name": "EcoSynTech_V6_3_F.Paste.gbr", "Function": "SolderpasteTop", "Polarities": "Positive"},
+        {"Name": "EcoSynTech_V6_3_B.Paste.gbr", "Function": "SolderpasteBot", "Polarities": "Positive"},
+        {"Name": "EcoSynTech_V6_3_F.SilkS.gbr", "Function": "SilkscreenTop", "Polarities": "Positive"},
+        {"Name": "EcoSynTech_V6_3_B.SilkS.gbr", "Function": "SilkscreenBot", "Polarities": "Positive"},
+        {"Name": "EcoSynTech_V6_3-Edge_Cuts.gbr", "Function": "BoardOutline", "Polarities": "Positive"},
+        {"Name": "EcoSynTech_V6_3-Dwgs_User.gbr", "Function": "Profile", "Polarities": "Positive"}
+      ],
+      "ViewOrder": 1,
+      "NumberOfFiles": 10
+    },
+    "Drill": {
+      "Files": [
+        {"Name": "EcoSynTech_V6_3-Plated.Txt", "Function": "PlatedPTHDrill", "Plating": "Plated"}
+      ],
+      "Format": "Excellon",
+      "Units": "Metric"
+    }
+  },
+  "MaterialStackup": [
+    {"LayerName": "Top Silkscreen", "Material": "Epoxy ink (white)", "Thickness": 0.020, "Unit": "mm"},
+    {"LayerName": "Top Solder Mask", "Material": "LPI Green", "Thickness": 0.020, "Unit": "mm"},
+    {"LayerName": "Top Copper", "Material": "Copper", "Thickness": 0.035, "Unit": "mm", "Type": "1 oz"},
+    {"LayerName": "Prepreg", "Material": "FR-4 Prepreg", "Thickness": 1.100, "Unit": "mm"},
+    {"LayerName": "Bottom Copper", "Material": "Copper", "Thickness": 0.035, "Unit": "mm", "Type": "1 oz"},
+    {"LayerName": "Bottom Solder Mask", "Material": "LPI Green", "Thickness": 0.020, "Unit": "mm"},
+    {"LayerName": "ENIG Finish", "Material": "Ni/Au", "Thickness": 0.005, "Unit": "mm"}
+  ]
+}

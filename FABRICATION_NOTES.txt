@@ -1,0 +1,170 @@
+================================================================================
+EcoSynTech PCB v6.3 — FABRICATION NOTES
+Industrial Outdoor IoT Controller | 2-Layer | 200mm x 150mm
+================================================================================
+Project: EcoSynTech PCB v6.3 Final
+Date: 2026-04-16
+Revision: 6.3 Final
+Origin: EcoSynTech Global
+
+--------------------------------------------------------------------------------
+1. GENERAL SPECIFICATIONS
+--------------------------------------------------------------------------------
+Board Size:           200.0mm x 150.0mm (±0.1mm tolerance)
+Board Thickness:       1.6mm (±0.1mm)
+Number of Layers:      2 layers
+Minimum Line Width:    0.15mm (signal), 0.25mm (default)
+Minimum Spacing:      0.2mm (default), 0.4mm (high voltage zones)
+Minimum Drill:         0.3mm (PTH), 3.2mm (NPTH mounting holes)
+Finished Copper:       1 oz (35μm) [PREFER 2 oz on bottom layer under relay area]
+Surface Finish:        ENIG (Electroless Nickel Immersion Gold) — MANDATORY
+Solder Mask:           Green LPI (Liquid Photoimageable), both sides
+Silkscreen:            White epoxy ink, front side only
+Board Material:        FR-4, Tg ≥ 130°C (high-Tg for industrial/outdoor use)
+Halogen Free:         Preferred (RoHS compliant)
+FR-4 Manufacturer:   Acceptable: IS400, IS410, or equivalent
+
+--------------------------------------------------------------------------------
+2. PCB FABRICATION REQUIREMENTS
+--------------------------------------------------------------------------------
+2.1 Board Preparation
+  - Routing tolerance: ±0.1mm on cut dimensions
+  - Burr height: max 0.1mm
+  - Panelization: V-score or tab-route recommended (see PANELIZATION.txt)
+  - Panel size: multiple of 200mm x 150mm or as agreed
+
+2.2 Copper Quality
+  - Base copper: 1 oz/sqft (35μm) minimum
+  - **IMPORTANT**: Bottom layer (B.Cu) under relay section — use 2 oz copper
+    due to high current through relay coil driver traces (~70mA per relay)
+  - All copper features must meet IPC Class 2 standards
+  - Minimum annular ring: 0.15mm for PTH, 0.1mm for vias
+  - Pad lift test: 5 lbs minimum
+
+2.3 Drilling
+  - Drill tolerance: ±0.05mm
+  - All PTH holes MUST be plated through (copper plated)
+  - NPTH mounting holes: 4 x 3.2mm (non-plated, clean deburr)
+  - Via holes: 0.3mm (drill) → 0.6mm outer pad
+  - SMD pad holes: 0.8mm (for SOIC-8, MSOP-8 footprints)
+  - THT pad holes: 1.0mm (for USB Micro-B, terminal blocks)
+  - Relay/terminal holes: 1.6mm (for relay coil leads, heavy-duty terminals)
+  - All holes must be clean, no epoxy voids, no barrel cracks
+  - Pilot drill required for holes <0.5mm
+
+2.4 Solder Mask
+  - Type: LPI (Liquid Photoimageable), green
+  - Both sides (top and bottom)
+  - Solder mask clearance: +0.05mm (openings larger than copper pad)
+  - Via tenting: NOT required — vias must be open for soldering
+  - Minimum mask bridge: 0.1mm
+  - Mask registration: ±0.05mm to copper
+
+2.5 Surface Finish (ENIG — MANDATORY)
+  - Nickel thickness: 3-6μm
+  - Gold thickness: 0.05-0.1μm (immersion gold)
+  - ENIG is REQUIRED for:
+    * ESP32-WROOM-32E module pads (BGA-like leads, need flat surface)
+    * All SMD pads for reliable soldering
+    * Long-term reliability in outdoor/industrial environment
+  - NO HASL finish accepted — ENIG only
+
+2.6 Silkscreen
+  - Front side only
+  - Color: White epoxy ink
+  - Minimum text height: 1.0mm, stroke width: 0.15mm
+  - All reference designators must be legible
+  - Silkscreen must not cover SMD pads or test points
+
+2.7 Electrical Test
+  - 100% electrical test (flying probe or bed-of-nails)
+  - Check for: opens, shorts, netlist verification
+  - Test voltage: minimum 50V for isolation testing
+
+--------------------------------------------------------------------------------
+3. SPECIAL REQUIREMENTS
+--------------------------------------------------------------------------------
+3.1 High Voltage Considerations
+  - Clearance between 220V relay contacts and low-voltage circuits: MIN 6mm
+  - Slot/cutout between relay area (bottom) and logic area (top-center)
+  - All HV zones must be clearly marked in fabrication data
+  - No buried vias in HV zones without approval
+
+3.2 ESP32 Antenna Keepout
+  - Zone: top-right corner, above ESP32 module
+  - No copper, no components, no vias within 15mm of antenna area
+  - See silkscreen marking on fabrication drawings
+
+3.3 Conformal Coating Ready (for after assembly)
+  - Board surface should be clean and dry
+  - No solder mask on vias (open for coating penetration)
+  - Board should pass ionic cleanliness test (max 1.56μg/inch NaCl equivalent)
+
+3.4 Environmental Rating
+  - Operating temp: -20°C to +70°C (industrial outdoor)
+  - Humidity: up to 95% RH non-condensing
+  - Board should be suitable for conformal coating application
+
+--------------------------------------------------------------------------------
+4. REQUIRED FILES FOR FABRICATION
+--------------------------------------------------------------------------------
+Gerber RS-274X Files (all required):
+  - EcoSynTech_V6_3_F.Cu.gbr         (Front Copper, Layer 1)
+  - EcoSynTech_V6_3_B.Cu.gbr         (Back Copper, Layer 2)
+  - EcoSynTech_V6_3_F.Mask.gbr       (Front Solder Mask)
+  - EcoSynTech_V6_3_B.Mask.gbr       (Back Solder Mask)
+  - EcoSynTech_V6_3_F.Paste.gbr      (Front Solder Paste — for SMD paste printing)
+  - EcoSynTech_V6_3_B.Paste.gbr      (Back Solder Paste)
+  - EcoSynTech_V6_3_F.SilkS.gbr       (Front Silkscreen)
+  - EcoSynTech_V6_3_B.SilkS.gbr      (Back Silkscreen)
+  - EcoSynTech_V6_3-Edge_Cuts.gbr     (Board Outline / Routing Profile)
+  - EcoSynTech_V6_3-Dwgs_User.gbr    (Fiducials, user drawings)
+  - EcoSynTech_V6_3-Cmts_User.gbr    (Fabrication notes on board)
+  - EcoSynTech_V6_3.gbrjob            (Gerber job file — full fabrication spec)
+
+NC Drill File:
+  - EcoSynTech_V6_3-Plated.Txt       (Excellon format, plated + non-plated)
+
+Documentation:
+  - FABRICATION_NOTES.txt            (this file)
+  - LAYER_STACKUP.txt                (detailed layer stack)
+  - PANELIZATION.txt                  (panel design if applicable)
+  - NET_CLASS_INFO.txt               (trace widths, clearances)
+
+Assembly Files:
+  - Pick_Place_F-Top.csv             (top side components)
+  - Pick_Place_B-Bot.csv            (bottom side components, usually only SMD)
+
+BOM: EcoSynTech_V6_3_Final_BOM_V3.csv (provided separately)
+
+--------------------------------------------------------------------------------
+5. QUALITY STANDARDS
+--------------------------------------------------------------------------------
+- IPC-A-600 Class 2 (Acceptability of Printed Boards)
+- IPC-6012 Class 2 (Qualification and Performance of Rigid Printed Boards)
+- RoHS 3 (EU 2015/863) — all materials must be RoHS compliant
+- REACH compliance required
+- UL rating preferred (FR-4 Tg130°C)
+
+--------------------------------------------------------------------------------
+6. DELIVERY REQUIREMENTS
+--------------------------------------------------------------------------------
+- Quantity: 10 pieces (or as ordered)
+- Each board must be individually labeled with:
+  * EcoSynTech V6.3
+  * Revision: Final
+  * Serial number (001-010)
+  * Date code (YYWW format)
+- Boards must be packed in ESD-safe trays or vacuum-sealed with desiccant
+- Delivery: as agreed in order
+
+--------------------------------------------------------------------------------
+7. CONTACTS
+--------------------------------------------------------------------------------
+Project Owner: EcoSynTech Global
+GitHub: github.com/ecosyntech68vn/EcoSynTech_PCB-for-IOT
+Board Spec: 200mm x 150mm x 1.6mm | 2-Layer | ENIG | FR-4 Tg130°C
+
+================================================================================
+END OF FABRICATION NOTES
+================================================================================

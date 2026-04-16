@@ -1,0 +1,76 @@
+================================================================================
+EcoSynTech PCB v6.3 — PANELIZATION GUIDE
+================================================================================
+
+BOARD SINGLE UNIT: 200mm x 150mm x 1.6mm
+
+PANELIZATION OPTIONS:
+====================
+
+Option 1: Single Board (No Panelization)
+  - Use this if ordering small quantities (1-10 boards)
+  - Route individual boards from panel
+  - Recommended for first production run
+
+Option 2: Array Panel (Recommended for 10 boards)
+  - Panel size: 410mm x 310mm (fits standard fab capabilities)
+  - 2 x 2 array = 4 boards per panel
+  - Use tab-route (mouse-bites) between boards
+  - Tab width: 3mm, spacing: 1.5mm
+  - Fiducials: 3 per board, 6 per panel
+
+  Panel Layout (410mm x 310mm):
+    +---------------------------+
+    |  [200x150]  |  [200x150]  |
+    |   Board 1  |   Board 2   |
+    |-------------+-------------|
+    |  [200x150]  |  [200x150]  |
+    |   Board 3  |   Board 4   |
+    +---------------------------+
+    (Tab routes between all boards)
+
+    Board spacing: 5mm between boards (routing clearance)
+    
+    Fiducial positions on panel:
+      - Panel corners: 10mm from edge
+      - Between boards: center of tab routes
+
+Option 3: V-Score Panel
+  - Score lines between boards (no tabs)
+  - V-score depth: 0.5mm (1/3 of board thickness)
+  - V-score spacing: 0.3mm
+  - Recommended for larger quantities (20+)
+
+PANEL REQUIREMENTS:
+==================
+  - Panel material: Same as board (FR-4 Tg130°C)
+  - Panel thickness: 1.6mm (same as board)
+  - Tab routing tolerance: ±0.1mm
+  - Panel must be clean (no debris from routing)
+  - Panel should have panel ID marking (laser engraved or silkscreen)
+
+REQUIRED PANEL FEATURES:
+=======================
+  1. Tooling holes: 3mm diameter, 6 places
+     - 3 on left edge, 3 on right edge
+     - Spacing: 25mm from edges
+  2. Fiducial marks:
+     - 3mm outer, 1mm inner (crosshair)
+     - 3 per individual board
+     - 6 per full panel
+  3. Panel ID: laser engraved
+     - Content: Part number, revision, date code, panel number
+     - Position: Bottom right of panel
+
+PANELIZATION SUMMARY:
+====================
+  Single unit: 200 x 150mm
+  Recommended panel: 410 x 310mm (2x2 array)
+  Routing method: Tab-route (mouse-bites)
+  Vias: All open (solderable)
+  Fiducials: 3 per board unit
+  Panel marking: Required
+
+================================================================================
+END OF PANELIZATION GUIDE
+================================================================================
