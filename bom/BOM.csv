@@ -98,8 +98,14 @@ R_RELAY_LIM;Current Limit Resistor;0.5R 1W 2512;R_2512;1;Power;LCSC;C25875;CRITI
 C_RELAY_BULK;Bulk Cap;1000uF 16V Low-ESR 105C;CAP_D10x12.5;1;Power;LCSC;C96548;CRITICAL - for 4 relay peak
 D_RELAY_TVS;TVS Relay Rail Protection;SMBJ5.0A;DO-214AA;1;Default;LCSC;C147853;Relay rail clamp
 ;=== RELAY DRIVERS (×4) + PC817 ISOLATION (V4 UPGRADE) ===;;;
-ISO_R1;Optocoupler Isolation;PC817X1;SMD-4;4;Default;LCSC;C97075;5kV isolation relay 1-4
-R_PC817_R1;PC817 LED Resistor;330R 5%;R_0805;4;Default;LCSC;C25871;LED series resistor
+ISO_R1;Optocoupler Isolation;PC817X1;SMD-4;1;Default;LCSC;C97075;5kV isolation relay 1
+ISO_R2;Optocoupler Isolation;PC817X1;SMD-4;1;Default;LCSC;C97075;5kV isolation relay 2
+ISO_R3;Optocoupler Isolation;PC817X1;SMD-4;1;Default;LCSC;C97075;5kV isolation relay 3
+ISO_R4;Optocoupler Isolation;PC817X1;SMD-4;1;Default;LCSC;C97075;5kV isolation relay 4
+R_PC817_R1;PC817 LED Resistor;330R 5%;R_0805;1;Default;LCSC;C25871;LED series resistor
+R_PC817_R2;PC817 LED Resistor;330R 5%;R_0805;1;Default;LCSC;C25871;LED series resistor
+R_PC817_R3;PC817 LED Resistor;330R 5%;R_0805;1;Default;LCSC;C25871;LED series resistor
+R_PC817_R4;PC817 LED Resistor;330R 5%;R_0805;1;Default;LCSC;C25871;LED series resistor
 Q_R1;NPN Transistor;S8050;SOT-23;4;Default;LCSC;C84756;Relay driver
 R_GR1;Base Resistor;100R 5%;R_0805;4;Default;LCSC;C25871;100R NOT 4.7k
 D_FLY1;Flyback Diode;1N4148;SOD-123;4;Default;LCSC;C147852;
@@ -108,8 +114,14 @@ RELAY1;Relay 5V 10A SPDT;SRD-05VDC-SL-C;RELAY_SRD_5V;4;Power;LCSC;C84757;Socket 
 F_R1_SNUB;RC Snubber;100R 1W + 0.1uF X2 275VAC;1206/1812;4;Default;LCSC;C147856;
 F_R1_MOV;MOV Snubber;MOV 275VAC;DISC_10MM;4;Default;LCSC;C147857;Optional
 ;=== RELAY STATUS LEDS (V3 UPGRADE) ===;;;
-LED_R1;LED Green Relay Status;Green LED 0805;LED_0805;4;Default;LCSC;C98471;Active-LOW indicator
-R_LED_R1;LED Resistor;1.5k 5%;R_0805;4;Default;LCSC;C25871;
+LED_R1;LED Green Relay Status;Green LED 0805;LED_0805;1;Default;LCSC;C98471;Active-LOW indicator relay 1
+LED_R2;LED Green Relay Status;Green LED 0805;LED_0805;1;Default;LCSC;C98471;Active-LOW indicator relay 2
+LED_R3;LED Green Relay Status;Green LED 0805;LED_0805;1;Default;LCSC;C98471;Active-LOW indicator relay 3
+LED_R4;LED Green Relay Status;Green LED 0805;LED_0805;1;Default;LCSC;C98471;Active-LOW indicator relay 4
+R_LED_R1;LED Resistor;1.5k 5%;R_0805;1;Default;LCSC;C25871;LED resistor relay 1
+R_LED_R2;LED Resistor;1.5k 5%;R_0805;1;Default;LCSC;C25871;LED resistor relay 2
+R_LED_R3;LED Resistor;1.5k 5%;R_0805;1;Default;LCSC;C25871;LED resistor relay 3
+R_LED_R4;LED Resistor;1.5k 5%;R_0805;1;Default;LCSC;C25871;LED resistor relay 4
 ;=== RELAY HARDWARE INTERLOCK (V3 NEW) ===;;;
 D_RELAY_PWR_GOOD;Dual Schottky Diode;BAT54S;SOT-23;1;Default;LCSC;C147855;POWER_GOOD→RELAY_EN
 D_RELAY_BOOT_OK;Dual Schottky Diode;BAT54S;SOT-23;1;Default;LCSC;C147855;BOOT_OK→RELAY_EN
@@ -201,11 +213,23 @@ D_FLY5;Flyback Diode;1N4148;SOD-123;4;Default;LCSC;C147852;
 RELAY5;Relay 5V 10A SPDT (opt);SRD-05VDC-SL-C;RELAY_SRD_5V;4;Power;LCSC;C84757;
 F_R5_SNUB;RC Snubber;100R 1W + 0.1uF X2 275VAC;1206/1812;4;Default;LCSC;C147856;
 ;=== EXPANSION RELAY PC817 ISOLATION (V4 UPGRADE) ===;;;
-ISO_R5;Optocoupler Isolation;PC817X1;SMD-4;4;Default;LCSC;C97075;5kV isolation relay 5-8
-R_PC817_R5;PC817 LED Resistor;330R 5%;R_0805;4;Default;LCSC;C25871;LED series resistor
+ISO_R5;Optocoupler Isolation;PC817X1;SMD-4;1;Default;LCSC;C97075;5kV isolation relay 5
+ISO_R6;Optocoupler Isolation;PC817X1;SMD-4;1;Default;LCSC;C97075;5kV isolation relay 6
+ISO_R7;Optocoupler Isolation;PC817X1;SMD-4;1;Default;LCSC;C97075;5kV isolation relay 7
+ISO_R8;Optocoupler Isolation;PC817X1;SMD-4;1;Default;LCSC;C97075;5kV isolation relay 8
+R_PC817_R5;PC817 LED Resistor;330R 5%;R_0805;1;Default;LCSC;C25871;LED series resistor
+R_PC817_R6;PC817 LED Resistor;330R 5%;R_0805;1;Default;LCSC;C25871;LED series resistor
+R_PC817_R7;PC817 LED Resistor;330R 5%;R_0805;1;Default;LCSC;C25871;LED series resistor
+R_PC817_R8;PC817 LED Resistor;330R 5%;R_0805;1;Default;LCSC;C25871;LED series resistor
 ;=== EXPANSION RELAY LEDS (V3 UPGRADE) ===;;;
-LED_R5;LED Green Relay Status;Green LED 0805;LED_0805;4;Default;LCSC;C98471;Active-LOW indicator
-R_LED_R5;LED Resistor;1.5k 5%;R_0805;4;Default;LCSC;C25871;
+LED_R5;LED Green Relay Status;Green LED 0805;LED_0805;1;Default;LCSC;C98471;Active-LOW indicator relay 5
+LED_R6;LED Green Relay Status;Green LED 0805;LED_0805;1;Default;LCSC;C98471;Active-LOW indicator relay 6
+LED_R7;LED Green Relay Status;Green LED 0805;LED_0805;1;Default;LCSC;C98471;Active-LOW indicator relay 7
+LED_R8;LED Green Relay Status;Green LED 0805;LED_0805;1;Default;LCSC;C98471;Active-LOW indicator relay 8
+R_LED_R5;LED Resistor;1.5k 5%;R_0805;1;Default;LCSC;C25871;LED resistor relay 5
+R_LED_R6;LED Resistor;1.5k 5%;R_0805;1;Default;LCSC;C25871;LED resistor relay 6
+R_LED_R7;LED Resistor;1.5k 5%;R_0805;1;Default;LCSC;C25871;LED resistor relay 7
+R_LED_R8;LED Resistor;1.5k 5%;R_0805;1;Default;LCSC;C25871;LED resistor relay 8
 ;=== EXTERNAL CONNECTORS ===;;;
 J_R1;Relay Out 1 (7.62mm);3P 7.62mm;CONN_TB_7.62_3P;4;HighVoltage;LCSC;C98742;
 J_R2;Relay Out 2 (7.62mm);3P 7.62mm;CONN_TB_7.62_3P;4;HighVoltage;LCSC;C98742;
