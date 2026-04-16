@@ -74,7 +74,7 @@ IMPORTANT NOTES:
 3. All vias must be open (not tented) for solderability
 4. Board must pass 100% E-test before delivery
 5. FR-4 Tg ≥ 130°C is MANDATORY (industrial/outdoor use)
-6. Relay isolation slot: routed cutout at Y=82-86mm, full width
+6. Relay isolation slot: routed cutout at Y=82-90mm (8mm width), full width
 
 DETAILED ZONE ALLOCATION ON BOARD:
 =================================
@@ -93,10 +93,10 @@ DETAILED ZONE ALLOCATION ON BOARD:
     I2C peripherals (BME280, OLED)
     ANTENNA KEEPOUT ZONE (X:156-175mm, Y:68-75mm)
 
-  Zone D (center-left, X:5-100mm, Y:30-82mm):
-    ESP32 module (full width), MicroSD, status LEDs
-    Ferrite bead rail splitting (FB_ESP, FB_ANA)
-    I2C expander MCP23017×2
+   Zone D (center-left, X:5-100mm, Y:30-90mm):
+     ESP32 module (full width), MicroSD, status LEDs
+     Ferrite bead rail splitting (FB_ESP, FB_ANA)
+     I2C expander MCP23017×2
     All decoupling capacitors
 
   Zone E (center-right, X:80-150mm, Y:45-70mm):
@@ -104,17 +104,17 @@ DETAILED ZONE ALLOCATION ON BOARD:
     Analog input networks (series resistors + TVS)
     Battery/VIN sense divider
 
-  Zone F (BOTTOM — RELAY ZONE, X:5-195mm, Y:82-145mm):
-    RELAY SECTION — HIGH VOLTAGE ZONE
-    4× relay sockets SRD-05VDC-SL-C (RELAY1-4)
-    4× relay drivers (S8050 NPN + flyback diodes)
-    RC snubbers across relay contacts
-    4× expansion relay sockets (RELAY5-8, optional)
-    DANGER: 220VAC relay contacts
-    ROUTED SLOT at Y=82-86mm separates relay from logic
-    Minimum HV clearance: 6mm from relay contacts to LV circuitry
-    Bottom copper: 2 oz recommended under relay drivers
-    GND via stitching: every 5mm along relay slot edges
+   Zone F (BOTTOM — RELAY ZONE, X:5-195mm, Y:90-145mm):
+     RELAY SECTION — HIGH VOLTAGE ZONE
+     4× relay sockets SRD-05VDC-SL-C (RELAY1-4)
+     4× relay drivers (S8050 NPN + flyback diodes)
+     RC snubbers across relay contacts
+     4× expansion relay sockets (RELAY5-8, optional)
+     DANGER: 220VAC relay contacts
+     ROUTED SLOT at Y=82-90mm (8mm) separates relay from logic
+     Minimum HV clearance: 8mm from relay contacts to LV circuitry
+     Bottom copper: 2 oz recommended under relay drivers
+     GND via stitching: every 5mm along relay slot edges
 
   Zone G (external connectors, X:185-200mm, Y:5-145mm):
     All field wiring terminal blocks

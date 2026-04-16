@@ -122,7 +122,7 @@ Filter caps close to each analog input
 1. Fill entire **bottom layer** with GND_STAR copper pour
 2. **Thermal relief pads** for all through-hole vias to ground
 3. **No routing** under ESP32 module (solid ground plane there)
-4. **Isolation gap**: 3mm gap in ground pour along relay isolation slot
+4. **Isolation gap**: 8mm gap in ground pour along relay isolation slot (Y=82-90mm)
 5. **Via stitching** along relay isolation slot (every 2mm, GND vias on both sides)
 6. GND vias near every decoupling capacitor (within 2mm)
 

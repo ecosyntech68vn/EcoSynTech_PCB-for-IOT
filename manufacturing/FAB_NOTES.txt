@@ -103,9 +103,10 @@ UL Rating:             Preferred (FR-4 Tg130°C)
 ================================================================================
 3.1 Relay Isolation Slot (ROUTED CUTOUT)
   - A routed SLOT must be cut through the board between relay zone and logic zone
-  - Slot position: Y = 82mm to Y = 86mm (4mm slot), full width X = 1mm to X = 199mm
+  - Slot position: Y = 82mm to Y = 90mm (8mm slot), full width X = 1mm to X = 199mm
   - This is a MECHANICAL CUTOUT, not just clearance — board must be routed through
-  - Slot must have GND via stitching on BOTH sides: every 5mm along Y=82 and Y=86
+  - Slot must have GND via stitching on BOTH sides: every 5mm along Y=82 and Y=90
+  - CRITICAL: 6-8mm clearance required per spec D3 for arc tracking prevention
   - No conductive traces may cross this slot on any layer
   - Purpose: Prevent arc tracking from 220VAC relay contacts to low-voltage logic
 
@@ -202,7 +203,7 @@ A. ENIG SURFACE FINISH IS NON-NEGOTIABLE
 
 B. RELAY ISOLATION SLOT IS A ROUTED CUTOUT
    This is not a solder mask opening — the board must be routed through
-   at Y=82-86mm. Provide a routed panel, not just masked copper.
+   at Y=82-90mm (8mm slot). Provide a routed panel, not just masked copper.
 
 C. BOTTOM LAYER COPPER WEIGHT
    Standard 1 oz bottom layer OK for most of board.

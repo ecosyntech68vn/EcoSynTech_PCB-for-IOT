@@ -180,11 +180,17 @@ add_fp(fp("R_0805", "R_FB2_5V", "52.3k 1%",
 add_fp(fp("R_0805", "R_EN_5V", "100k 1%",
     60, 28, [pad_smd(-0.5, 0, 0.8, 0.5), pad_smd(0.5, 0, 0.8, 0.5)], smd=True))
 
+add_fp(fp("C_0603", "C_BST_5V", "100nF 25V X7R",
+    80, 35, [pad_smd(-0.4, 0, 0.6, 0.4), pad_smd(0.4, 0, 0.6, 0.4)], smd=True))
+
 add_fp(fp("D_SMA", "D_OUT5V", "SS34",
     90, 50, [pad_smd(-2.4, 0, 1.8, 1.35), pad_smd(2.4, 0, 1.8, 1.35)], smd=True))
 
-# Thermal vias under U2_5V
-for tx, ty in [(68, 38), (68, 35), (68, 32), (76, 38), (76, 35), (76, 32)]:
+# Thermal vias under U2_5V (enhanced for better thermal management)
+# 16 thermal vias for MP1584 @ 2A output - handles ~1.1W dissipation
+for tx, ty in [(65, 40), (65, 38), (65, 36), (65, 34), (65, 32), (65, 30),
+                (68, 40), (68, 38), (68, 36), (68, 34), (68, 32), (68, 30),
+                (71, 38), (71, 35), (71, 32), (74, 38)]:
     add_fp(fp("VIA", f"TV_U2_5V_{tx}_{ty}", "",
         tx, ty, [pad_tht(0, 0, 0.4, 0.6, 0.6)]))
 
@@ -219,7 +225,14 @@ add_fp(fp("R_0805", "R_FB2_3V3", "31.6k 1%",
 add_fp(fp("R_0805", "R_EN_3V3", "100k 1%",
     100, 28, [pad_smd(-0.5, 0, 0.8, 0.5), pad_smd(0.5, 0, 0.8, 0.5)], smd=True))
 
-for tx, ty in [(108, 38), (108, 35), (108, 32), (116, 38), (116, 35), (116, 32)]:
+add_fp(fp("C_0603", "C_BST_3V3", "100nF 25V X7R",
+    120, 35, [pad_smd(-0.4, 0, 0.6, 0.4), pad_smd(0.4, 0, 0.6, 0.4)], smd=True))
+
+# Thermal vias under U3_3V3 (enhanced for better thermal management)
+# 16 thermal vias for MP1584 @ 1A output - handles ~0.7W dissipation
+for tx, ty in [(105, 40), (105, 38), (105, 36), (105, 34), (105, 32), (105, 30),
+                (108, 40), (108, 38), (108, 36), (108, 34), (108, 32), (108, 30),
+                (111, 38), (111, 35), (111, 32), (114, 38)]:
     add_fp(fp("VIA", f"TV_U3_3V3_{tx}_{ty}", "",
         tx, ty, [pad_tht(0, 0, 0.4, 0.6, 0.6)]))
 
@@ -402,22 +415,54 @@ add_fp(fp("CAP_D10x12.5", "C_RELAY_BULK", "1000uF 16V",
 add_fp(fp("D_SMB", "D_RELAY_TVS", "SMBJ5.0A",
     40, 88, [pad_smd(-2.4, 0, 1.8, 1.35), pad_smd(2.4, 0, 1.8, 1.35)], smd=True))
 
-# 4 relay drivers
+# 4 relay drivers with PC817 optocoupler isolation
 for i, y in enumerate([93, 110, 127, 144]):
     drv_x = 162
     r_x = 155
     q_x = 148
+    pc817_x = 165  # PC817 optocoupler position (near ESP32 side)
+    
+    # PC817 optocoupler - isolates ESP32 from relay driver
+    # Pin 1: LED Anode, Pin 2: LED Cathode, Pin 3: Emitter, Pin 4: Collector
+    add_fp(fp("PC817_SMD", f"ISO_R{i+1}", "PC817",
+        pc817_x, y, [
+            pad_smd(-1.5, -2.0, 0.5, 0.6),  # Pin 1: LED Anode
+            pad_smd(-1.5, 2.0, 0.5, 0.6),   # Pin 2: LED Cathode (to GND)
+            pad_smd(1.5, 2.0, 0.5, 0.6),    # Pin 3: Emitter (to GND)
+            pad_smd(1.5, -2.0, 0.5, 0.6),   # Pin 4: Collector (to Q_R base)
+        ], smd=True))
+    
+    # LED series resistor for PC817 input
+    add_fp(fp("R_0805", f"R_PC817_R{i+1}", "330R",
+        pc817_x + 8, y, [pad_smd(-0.5, 0, 0.8, 0.5), pad_smd(0.5, 0, 0.8, 0.5)], smd=True))
+    
+    # Relay driver transistor (driven by PC817 collector)
     add_fp(fp("SOT-23", f"Q_R{i+1}", "S8050",
         q_x, y, [
             pad_smd(-0.5, -0.95, 0.6, 0.9), pad_smd(-0.5, 0.95, 0.6, 0.9),
             pad_smd(0.5, 0, 0.6, 0.9),
         ], smd=True))
+    
+    # Gate resistor (now driven by PC817 collector, not directly by GPIO)
     add_fp(fp("R_0805", f"R_GR{i+1}", "100R",
         r_x, y, [pad_smd(-0.5, 0, 0.8, 0.5), pad_smd(0.5, 0, 0.8, 0.5)], smd=True))
+    
+    # Flyback diode across relay coil
     add_fp(fp("D_SOD-123", f"D_FLY{i+1}", "1N4148",
         r_x + 12, y, [pad_smd(-0.7, 0, 0.8, 0.5), pad_smd(0.7, 0, 0.8, 0.5)], smd=True))
-    add_fp(fp("SOT-23", f"R_PD_R{i+1}", "100k",
+    
+    # Pull-down resistor on PC817 output
+    add_fp(fp("R_0805", f"R_PD_R{i+1}", "100k",
         q_x - 8, y, [pad_smd(-0.5, 0, 0.8, 0.5), pad_smd(0.5, 0, 0.8, 0.5)], smd=True))
+    
+    # LED status indicator for relay (active-LOW)
+    # LED placed near relay connector, visible from panel
+    led_x = 183
+    led_y = y + 3
+    add_fp(fp("LED_0805", f"LED_R{i+1}", "Green LED",
+        led_x, led_y, [pad_smd(-0.5, 0, 0.8, 0.5), pad_smd(0.5, 0, 0.8, 0.5)], smd=True))
+    add_fp(fp("R_0805", f"R_LED_R{i+1}", "1.5k",
+        led_x - 3, led_y, [pad_smd(-0.5, 0, 0.8, 0.5), pad_smd(0.5, 0, 0.8, 0.5)], smd=True))
 
 # Relay sockets
 for i, y in enumerate([93, 110, 127, 144]):
@@ -427,6 +472,18 @@ for i, y in enumerate([93, 110, 127, 144]):
         [pad_tht(-3.81, -2.54, 1.0), pad_tht(-3.81, 2.54, 1.0),
          pad_tht(3.81, -2.54, 1.0), pad_tht(3.81, 2.54, 1.0),
          pad_tht(0, -2.54, 1.0)]))
+
+    # RC Snubber across relay contacts (COM-NO) - 100R + 0.1uF X2 275VAC
+    snuber_x = relay_x - 5
+    add_fp(fp("C_1206", f"F_R{i+1}_SNUB_C", "100nF 275VAC",
+        snuber_x, y, [pad_smd(-0.8, 0, 1.4, 0.9), pad_smd(0.8, 0, 1.4, 0.9)], smd=True))
+    add_fp(fp("R_1206", f"F_R{i+1}_SNUB_R", "100R 1W",
+        snuber_x - 5, y, [pad_smd(-0.8, 0, 1.4, 0.9), pad_smd(0.8, 0, 1.4, 0.9)], smd=True))
+
+    # MOV Snubber on relay contacts (optional but recommended)
+    mov_x = relay_x - 10
+    add_fp(fp("DISC_10MM", f"F_R{i+1}_MOV", "MOV 275VAC",
+        mov_x, y, [pad_tht(-2.5, 0, 1.0), pad_tht(2.5, 0, 1.0)]))
 
     j_x = 185
     add_fp(fp("CONN_7.62_3P", f"J_R{i+1}", "3P 7.62mm",
@@ -500,11 +557,17 @@ add_fp(fp("CONN_3.81_6P", "J_AIN", "CONN_3.81_6P",
     ]))
 
 # ── BATTERY/VIN SENSE ─────────────────────────────────────────────────────
+# VIN sense divider - designed for 12-24V input range
+# R_VTOP=47k, R_VBOT=6.8k → VIN_max ≈ 26V at 3.3V ADC
+# Calculation: Vout = VIN × (6.8k / (47k + 6.8k)) = VIN × 0.126
 add_fp(fp("CONN_5.08_2P", "J_VBAT", "CONN_5.08_2P",
     190, 28, [pad_tht(0, -2.54, 1.0, 1.6, 1.6), pad_tht(0, 2.54, 1.0, 1.6, 1.6)]))
-add_fp(fp("R_0805", "R_VTOP", "100k 1%",
+# TVS SMBJ30A bảo vệ VBAT chống surge
+add_fp(fp("D_SMB", "D_VBAT_TVS", "SMBJ30A",
+    185, 28, [pad_smd(-2.4, 0, 1.8, 1.35), pad_smd(2.4, 0, 1.8, 1.35)], smd=True))
+add_fp(fp("R_0805", "R_VTOP", "47k 1%",
     178, 28, [pad_smd(-0.5, 0, 0.8, 0.5), pad_smd(0.5, 0, 0.8, 0.5)], smd=True))
-add_fp(fp("R_0805", "R_VBOT", "33k 1%",
+add_fp(fp("R_0805", "R_VBOT", "6.8k 1%",
     175, 25, [pad_smd(-0.5, 0, 0.8, 0.5), pad_smd(0.5, 0, 0.8, 0.5)], smd=True))
 add_fp(fp("C_0805", "C_VSENSE", "100nF",
     178, 22, [pad_smd(-0.5, 0, 0.8, 0.5), pad_smd(0.5, 0, 0.8, 0.5)], smd=True))
@@ -614,8 +677,25 @@ for y in [110, 125]:
         y - 2, 115 if y == 110 else 130, [pad_smd(-0.5, 0, 0.8, 0.5), pad_smd(0.5, 0, 0.8, 0.5)], smd=True))
 
 # ── EXPANSION RELAYS 5-8 (Z10 right: X:150-195, Y:120-145) ────────────────
+# With PC817 optocoupler isolation for MCP23017 protection
 for i, y in enumerate([93, 110, 127, 144]):
     drv_x = 148
+    pc817_x = 165  # PC817 optocoupler position
+    
+    # PC817 optocoupler - isolates MCP23017 from relay driver
+    add_fp(fp("PC817_SMD", f"ISO_R{i+5}", "PC817",
+        pc817_x, y, [
+            pad_smd(-1.5, -2.0, 0.5, 0.6),  # Pin 1: LED Anode
+            pad_smd(-1.5, 2.0, 0.5, 0.6),   # Pin 2: LED Cathode (to GND)
+            pad_smd(1.5, 2.0, 0.5, 0.6),    # Pin 3: Emitter (to GND)
+            pad_smd(1.5, -2.0, 0.5, 0.6),   # Pin 4: Collector (to Q_R base)
+        ], smd=True))
+    
+    # LED series resistor for PC817 input
+    add_fp(fp("R_0805", f"R_PC817_R{i+5}", "330R",
+        pc817_x + 8, y, [pad_smd(-0.5, 0, 0.8, 0.5), pad_smd(0.5, 0, 0.8, 0.5)], smd=True))
+    
+    # Relay driver transistor (driven by PC817 collector)
     add_fp(fp("SOT-23", f"Q_R{i+5}", "S8050",
         drv_x, y, [
             pad_smd(-0.5, -0.95, 0.6, 0.9), pad_smd(-0.5, 0.95, 0.6, 0.9),
@@ -626,6 +706,12 @@ for i, y in enumerate([93, 110, 127, 144]):
     add_fp(fp("D_SOD-123", f"D_FLY{i+5}", "1N4148",
         drv_x + 14, y, [pad_smd(-0.7, 0, 0.8, 0.5), pad_smd(0.7, 0, 0.8, 0.5)], smd=True))
     relay_x = 168
+    # RC Snubber for expansion relays 5-8 (optional)
+    snuber_x = relay_x - 5
+    add_fp(fp("C_1206", f"F_R{i+5}_SNUB_C", "100nF 275VAC",
+        snuber_x, y, [pad_smd(-0.8, 0, 1.4, 0.9), pad_smd(0.8, 0, 1.4, 0.9)], smd=True))
+    add_fp(fp("R_1206", f"F_R{i+5}_SNUB_R", "100R 1W",
+        snuber_x - 5, y, [pad_smd(-0.8, 0, 1.4, 0.9), pad_smd(0.8, 0, 1.4, 0.9)], smd=True))
     j_x = 178
     add_fp(fp("RELAY_SRD_5V", f"RELAY{i+5}", "SRD-05VDC-SL-C",
         relay_x, y,
@@ -635,6 +721,23 @@ for i, y in enumerate([93, 110, 127, 144]):
     add_fp(fp("CONN_7.62_3P", f"J_R{i+5}", "3P 7.62mm",
         j_x, y,
         [pad_tht(-7.62, -2.54, 1.2), pad_tht(0, -2.54, 1.2), pad_tht(7.62, -2.54, 1.2)]))
+    
+    # LED status indicator for expansion relay (active-LOW)
+    led_x = 183
+    led_y = y + 3
+    add_fp(fp("LED_0805", f"LED_R{i+5}", "Green LED",
+        led_x, led_y, [pad_smd(-0.5, 0, 0.8, 0.5), pad_smd(0.5, 0, 0.8, 0.5)], smd=True))
+    add_fp(fp("R_0805", f"R_LED_R{i+5}", "1.5k",
+        led_x - 3, led_y, [pad_smd(-0.5, 0, 0.8, 0.5), pad_smd(0.5, 0, 0.8, 0.5)], smd=True))
+
+# ── FIDUCIAL MARKS (Assembly) ───────────────────────────────────────────────
+# 3 fiducial marks for machine assembly (1.5mm diameter, 3mm clearance)
+add_fp(fp("FIDUCIAL", "Fiducial_TL", "Fiducial",
+    10, 10, [pad_smd_circle(0, 0, 1.5)], smd=True))
+add_fp(fp("FIDUCIAL", "Fiducial_TR", "Fiducial",
+    190, 10, [pad_smd_circle(0, 0, 1.5)], smd=True))
+add_fp(fp("FIDUCIAL", "Fiducial_BL", "Fiducial",
+    10, 140, [pad_smd_circle(0, 0, 1.5)], smd=True))
 
 # ── TEST POINTS ─────────────────────────────────────────────────────────────
 tp_y = 0
@@ -846,10 +949,10 @@ t("USB_5V_FUSED", "F", 46, 30, 53, 30, 0.6)
 # TPL5010 +3V3_ESP
 t("+3V3_ESP", "F", 50, 58, 50, 57, 0.6)
 
-# GND via stitching along relay isolation slot
+# GND via stitching along relay isolation slot (8mm slot: Y=82 to Y=90)
 for x in range(10, 195, 5):
     v("GND_STAR", x, 82)
-    v("GND_STAR", x, 86)
+    v("GND_STAR", x, 90)
 
 # GND stitching everywhere
 for x, y in [(72, 35), (72, 38), (72, 32), (112, 35), (112, 38), (112, 32),
@@ -1228,10 +1331,11 @@ def gen_pcb():
                     f'(layer Edge.Cuts) (width {u(0.1)}) (tstamp "{uid()}"))')
 
     # Relay isolation slot (cutout between relay and logic zones)
+    # 8mm slot width: Y=82mm to Y=90mm (per spec D3: 6-8mm clearance)
     slot_uuid = uid()
     lines.append(f'  (gr_line (start {u(1)} {u(82)}) (end {u(199)} {u(82)}) '
                 f'(layer Edge.Cuts) (width {u(0.3)}) (tstamp "{slot_uuid}"))')
-    lines.append(f'  (gr_line (start {u(1)} {u(86)}) (end {u(199)} {u(86)}) '
+    lines.append(f'  (gr_line (start {u(1)} {u(90)}) (end {u(199)} {u(90)}) '
                 f'(layer Edge.Cuts) (width {u(0.3)}) (tstamp "{uid()}"))')
 
     # Silkscreen elements

@@ -1,0 +1,195 @@
+# FABRICATION CHECKLIST - EcoSynTech PCB v6.3
+# ================================================
+# Ngày: 2026-04-16
+# Rev: 6.3 Final
+# ================================================
+
+## I. THÔNG TIN CẦN XÁC NHẬN TRƯỚC KHI ĐẶT HÀNG
+
+### 1. Surface Finish - ENIG (BẮT BUỘC)
+[ ] Xác nhận sử dụng ENIG (Electroless Nickel Immersion Gold)
+[ ] Độ dày Nickel: 3-6μm
+[ ] Độ dày Gold: 0.05-0.1μm
+[ ] KHÔNG chấp nhận HASL dưới mọi hình thức
+[ ] Lý do: ESP32-WROOM-32E có BGA-like pitch cần bề mặt phẳng
+
+### 2. Copper Weight - Đặc biệt quan trọng
+[ ] TOP layer: 1 oz (35μm) - Standard
+[ ] BOTTOM layer: 
+    - Standard area: 1 oz (35μm)
+    - RELAY ZONE (X:140-185mm, Y:82-145mm): **2 oz (70μm) BẮT BUỘC**
+    - Lý do: Relay coil driver transistors cần dẫn ~280mA liên tục
+
+### 3. Board Material - FR-4 Tg ≥ 130°C
+[ ] Xác nhận FR-4 với Tg ≥ 130°C
+[ ] Halogen Free preferred (RoHS compliant)
+[ ] UL rating preferred
+
+### 4. Relay Isolation Slot - ROUTED CUTOUT
+[ ] Khe cắt phải được ROUTED (không phải chỉ mask opening)
+[ ] Vị trí: Y = 82mm đến Y = 90mm (chiều rộng 8mm)
+[ ] Chiều dài: X = 1mm đến X = 199mm (toàn bộ chiều rộng board)
+[ ] Đây là MECHANICAL CUTOUT - board phải được cắt rời
+[ ] Tolerance: ±0.1mm
+
+### 5. Mounting Holes - 4x NPTH
+[ ] Vị trí: (5,5), (5,145), (195,5), (195,145) mm
+[ ] Đường kính lỗ: 3.2mm
+[ ] NPTH (Non-Plated Through Hole) - KHÔNG mạ
+[ ] Deburr sạch, không bavia
+
+## II. LỚP MẶT (LAYER STACKUP)
+
+### Layer 1: Top Silkscreen
+[ ] Màu: Trắng epoxy ink
+[ ] Chỉ mặt trước (front side)
+[ ] Minimum text height: 1.0mm, stroke: 0.15mm
+
+### Layer 2: Top Solder Mask
+[ ] Màu: Xanh lá (green LPI)
+[ ] Độ dày: 18-25μm sau khi định cứng
+[ ] Clearance: +0.05mm per side
+
+### Layer 3: Top Copper
+[ ] 1 oz (35μm)
+[ ] Minimum trace width: 0.15mm (signal), 0.25mm (default)
+[ ] Minimum spacing: 0.2mm (default), 0.4mm (HV zones)
+
+### Layer 4: FR-4 Core
+[ ] Độ dày: 1.56mm (sau khi hoàn thiện)
+[ ] Tg ≥ 130°C
+
+### Layer 5: Bottom Copper  
+[ ] 1 oz standard, **2 oz in relay zone X:140-185mm, Y:82-145mm**
+[ ] Thermal relief pads cho tất cả through-hole vias
+
+### Layer 6: Bottom Solder Mask
+[ ] Màu: Xanh lá (green LPI)
+[ ] Via openings: MỞ (KHÔNG tent) - để có thể hàn được
+
+### Layer 7: ENIG Surface Finish (TOP + BOTTOM)
+[ ] ENIG bắt buộc cho cả 2 mặt
+
+## III. DRILL SPECIFICATIONS
+
+### PTH (Plated Through Holes)
+[ ] Tất cả lỗ phải được mạ đồng (copper plated)
+[ ] Via holes: 0.3mm drill → 0.6mm outer pad
+[ ] THT pad holes: 
+    - 0.8mm (cho connectors nhỏ)
+    - 1.0mm (cho USB)
+    - 1.6mm (cho relays)
+[ ] Minimum annular ring: 0.15mm cho PTH
+[ ] Drill tolerance: ±0.05mm
+
+### NPTH (Non-Plated Through Holes)
+[ ] 4x mounting holes 3.2mm (đã nêu ở trên)
+[ ] Sạch deburr
+
+## IV. SILKSCREEN LABELS (BẮT BUỘC)
+
+Board phải có các nhãn sau trên silkscreen:
+
+### Nhãn an toàn:
+[ ] "EcoSynTech V6.3 Industrial Pro"
+[ ] "Rev 6.3 Final | 2-Layer | ENIG | FR-4 Tg130"
+[ ] "CAUTION: HIGH VOLTAGE 220VAC" (vùng relay)
+[ ] "THAY ĐÚNG GIÁ TRỊ CẦU CHÌ"
+[ ] "KIỂM TRA CỰC TÍNH TRƯỚC KHI CẤP NGUỒN"
+[ ] "DO NOT REMOVE SNUBBER - ARC HAZARD"
+[ ] "ANTENNA KEEPOUT ZONE" (X:156-175mm, Y:68-75mm)
+
+### Nhãn linh kiện:
+[ ] F1 (2A Slow) - gần cầu chì
+[ ] TVS1 SMBJ24A - gần TVS
+[ ] MOV1 14D201K - gần MOV
+[ ] GDT1 Bourns 2027-09-B - gần GDT
+[ ] D_VBAT_TVS SMBJ30A - gần VBAT terminal (V3 upgrade)
+[ ] ISO_R1-4 PC817 - gần relay 1-4 (V4 upgrade)
+[ ] ISO_R5-8 PC817 - gần relay 5-8 (V4 upgrade)
+[ ] LED_R1-4 - gần relay outputs (V3 upgrade)
+[ ] LED_R5-8 - gần expansion relay outputs (V3 upgrade)
+[ ] RELAY 1-4 COM / NO / NC (với sơ đồ mũi tên)
+[ ] BOOT - gần chân BOOT_ESP
+[ ] RESET - gần chân EN_ESP
+
+## V. ELECTRICAL TEST
+
+[ ] 100% electrical test (flying probe hoặc bed-of-nails)
+[ ] Check: opens, shorts, netlist verification
+[ ] Test voltage: minimum 50V cho isolation testing
+[ ] Yêu cầu báo cáo netlist verification
+
+## VI. QUALITY STANDARDS
+
+[ ] IPC-A-600 Class 2
+[ ] IPC-6012 Class 2
+[ ] IPC-2221
+[ ] RoHS 3 (EU 2015/863)
+[ ] REACH compliance
+
+## VII. FILES CẦN CUNG CẤP
+
+### Gerber RS-274X:
+- EcoSynTech_V6_3_F.Cu.gbr (Front Copper)
+- EcoSynTech_V6_3_B.Cu.gbr (Back Copper) 
+- EcoSynTech_V6_3_F.Mask.gbr (Front Solder Mask)
+- EcoSynTech_V6_3_B.Mask.gbr (Back Solder Mask)
+- EcoSynTech_V6_3_F.Paste.gbr (Front Solder Paste)
+- EcoSynTech_V6_3_B.Paste.gbr (Back Solder Paste)
+- EcoSynTech_V6_3_F.SilkS.gbr (Front Silkscreen)
+- EcoSynTech_V6_3_B.SilkS.gbr (Back Silkscreen)
+- EcoSynTech_V6_3-Edge_Cuts.gbr (Board Outline + Relay Slot)
+- EcoSynTech_V6_3-Dwgs_User.gbr (Fiducials)
+- EcoSynTech_V6_3.gbrjob (Gerber job file)
+
+### NC Drill:
+- EcoSynTech_V6_3-Plated.Txt (PTH holes)
+
+### Documentation:
+- FABRICATION_NOTES.txt
+- LAYER_STACKUP.txt  
+- PANELIZATION.txt (nếu panelized)
+- NET_CLASS_INFO.txt
+
+## VIII. SPECIAL NOTES
+
+### A. Relay Isolation Slot
+Đây là routed cutout, không phải masked opening. Board panel phải được cắt rời tại vị trí này.
+
+### B. Via Tenting
+Tất cả vias phải MỞ (không tent) để có thể hàn được. Chỉ có thermal relief pads cho ground connections.
+
+### C. ESP32 Module
+ESP32-WROOM-32E cần reflow profile đặc biệt. Tham khảo Espressif guidelines.
+
+### D. Antenna Keepout
+Vùng X:156-175mm, Y:68-75mm phải KHÔNG có copper, components, vias hoặc traces trên tất cả các lớp.
+
+## IX. CONTACT INFORMATION
+
+Project: EcoSynTech PCB v6.3 Final
+Owner: EcoSynTech Global
+Email: ecosyntech68vn@github.com
+GitHub: github.com/ecosyntech68vn/EcoSynTech_PCB-for-IOT
+
+## X. SIGN-OFF
+
+### Fab House Acknowledgment:
+Tôi/tổ chức đã đọc và xác nhận các yêu cầu trên:
+
+[Tên công ty]: ___________________________
+[Người đại diện]: ___________________________
+[Ngày]: ___________________________
+[Chữ ký]: ___________________________
+
+---
+**CRITICAL ITEMS - PHẢI XÁC NHẬN:**
+1. ENIG surface finish - KHÔNG chấp nhận HASL
+2. 2 oz copper bottom layer trong vùng relay
+3. Relay isolation slot là ROUTED CUTOUT (8mm width)
+4. Vias phải MỞ (không tent)
+
+---
+Generated: 2026-04-16
+Document: FAB_CHECKLIST_v6.3.txt

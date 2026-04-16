@@ -43,7 +43,7 @@
         "LayerName": "B.Cu",
         "Plot": true,
         "CopperWeight": "1 oz",
-        "Notes": "2 oz recommended for relay zone X:140-185mm Y:82-145mm",
+        "Notes": "2 oz REQUIRED for relay zone X:140-185mm Y:82-145mm",
         "PowerRailConnections": ["GND_STAR"]
       }
     },
@@ -52,7 +52,7 @@
     "MinimumSolderMaskClearance": 0.05,
     "Vias": {
       "Plated": true,
-      "DrillFinishedSize": 0.3,
+      "DrillFinishedSize": 0.4,
       "OuterDiameter": 0.6
     }
   },

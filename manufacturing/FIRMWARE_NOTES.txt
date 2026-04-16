@@ -1,0 +1,398 @@
+# FIRMWARE NOTES - EcoSynTech PCB v6.3
+# ====================================
+# Ngày: 2026-04-16
+# Rev: 6.3 Final
+# ====================================
+
+## 1. GPIO ASSIGNMENTS (ESP32-WROOM-32E)
+
+| GPIO | Chức năng | Logic | Ghi chú |
+|------|-----------|-------|---------|
+| IO1 | UART0_TX / BOOT_OK | Output | Pull HIGH sau boot thành công |
+| IO3 | UART0_RX | Input | CP2102 TX |
+| IO4 | WATCHDOG_KICK | Output | TPL5010 DONE pin |
+| IO5 | SD_CS | Output | MicroSD card select |
+| IO12 | (không sử dụng) | - | - |
+| IO13 | LED_ERROR | **Active-LOW** | Pull LOW để bật LED |
+| IO14 | RELAY4_DRV | Output | Q_R4 base |
+| IO16 | LED_WIFI | **Active-LOW** | Pull LOW để bật LED |
+| IO17 | LED_MQTT | **Active-LOW** | Pull LOW để bật LED |
+| IO18 | SD_SCK | Output | SPI clock |
+| IO19 | SD_MISO | Input | SPI data |
+| IO21 | I2C_SDA | Bidirectional | ADS1115, MCP23017, BME280, OLED |
+| IO22 | I2C_SCL | Output | I2C clock |
+| IO23 | SD_MOSI | Output | SPI data |
+| IO25 | RELAY3_DRV | Output | Q_R3 base |
+| IO26 | RELAY1_DRV | Output | Q_R1 base |
+| IO27 | RELAY2_DRV | Output | Q_R2 base |
+| IO32 | DS18B20_RAW | Bidirectional | 1-Wire, có series 100Ω |
+| IO33 | DHT22_RAW | Bidirectional | Open-collector, có series 100Ω |
+| IO35 | VIN_SENSE_RAW | Input | Voltage divider 100k/33k, max 3.3V |
+
+## 2. LED LOGIC (ACTIVE-LOW)
+
+**QUAN TRỌNG:** Tất cả LEDs sử dụng active-LOW logic.
+
+```
+              ESP32 GPIO
+                  │
+                  ▼
+         ┌────────┴────────┐
+         │    1.5kΩ        │
+         └────────┬────────┘
+                  │
+                  ▼
+         ┌────────┴────────┐
+         │       LED       │
+         │   (Anode)      │
+         └────────┬────────┘
+                  │
+                  ▼
+         ┌────────┴────────┐
+         │   ESP32 GPIO    │  (Same pin - current sinks when LOW)
+         └────────────────┘
+```
+
+**Code example:**
+```c
+// Bật LED (GPIO LOW)
+gpio_set_level(LED_WIFI_GPIO, 0);
+
+// Tắt LED (GPIO HIGH)  
+gpio_set_level(LED_WIFI_GPIO, 1);
+```
+
+## 3. BOOT_OK SIGNAL
+
+Tín hiệu BOOT_OK phải được pull HIGH sau khi firmware khởi động thành công:
+
+```c
+// Trong firmware initialization
+void app_main(void) {
+    // ... initialization code ...
+    
+    // Boot successful - pull BOOT_OK HIGH
+    gpio_set_direction(BOOT_OK_GPIO, GPIO_MODE_OUTPUT);
+    gpio_set_level(BOOT_OK_GPIO, 1);  // Bật relay enable path
+    
+    // Bây giờ relays có thể được điều khiển
+}
+```
+
+**Lưu ý:** BOOT_OK được diode-OR với POWER_GOOD qua BAT54S để tạo RELAY_EN. Cả hai phải HIGH để relay coils được enable.
+
+## 4. WATCHDOG TIMEOUT
+
+TPL5010 configured cho ~1.6s timeout:
+- R_WD_RT = 49.9kΩ
+- DONE pin phải được toggle trước khi timeout
+- Nếu không toggle, WATCHDOG_RST sẽ pull EN_ESP LOW → reset ESP32
+
+```c
+#define WATCHDOG_KICK_GPIO  4
+
+void kick_watchdog(void) {
+    // Toggle DONE pin to reset watchdog timer
+    static bool state = false;
+    gpio_set_level(WATCHDOG_KICK_GPIO, state);
+    state = !state;
+}
+
+// Gọi trong main loop
+void app_main(void) {
+    while(1) {
+        kick_watchdog();
+        vTaskDelay(pdMS_TO_TICKS(1000));  // Kick every 1 second
+    }
+}
+```
+
+## 5. RELAY CONTROL (V4 - WITH PC817 ISOLATION)
+
+### Relay Driver Circuit (V4 UPGRADE):
+```
+┌──────────────────────────────────────────────────────────────────┐
+│                     PC817 OPTOCOUPLER                            │
+│  ESP32 GPIO ──330Ω──┬── PIN 1 (LED Anode)                      │
+│                      │         │                                 │
+│                     GND ─── PIN 2 (LED Cathode)                 │
+│                              │                                   │
+│                     PIN 4 (Collector) ─── Q_R Base             │
+│                      │                                          │
+│                     GND ─── PIN 3 (Emitter)                     │
+└──────────────────────────────────────────────────────────────────┘
+                              │
+                         Q_R Collector ─── RELAY COIL ── +5V_RELAY_RAW
+                              │
+                             GND
+```
+
+**Đặc điểm PC817:**
+- Cách ly quang: 5kV (bảo vệ ESP32 khỏi flyback motor/actuator)
+- CTR (Current Transfer Ratio): 50-600%
+- LED forward current: 50mA max
+- Response time: 3-18µs
+
+**Logic (không đổi):**
+```
+GPIO HIGH → LED ON → Transistor ON → Relay ON
+GPIO LOW  → LED OFF → Transistor OFF → Relay OFF
+```
+
+### Code:
+```c
+#define RELAY_ON  1  // GPIO HIGH = relay ON
+#define RELAY_OFF 0 // GPIO LOW = relay OFF
+
+void set_relay(int relay_num, int state) {
+    // Check hardware interlock first
+    if (read_relay_enable() == 0) return;  // Safety interlock
+    
+    int gpio;
+    switch(relay_num) {
+        case 1: gpio = RELAY1_GPIO; break;
+        case 2: gpio = RELAY2_GPIO; break;
+        case 3: gpio = RELAY3_GPIO; break;
+        case 4: gpio = RELAY4_GPIO; break;
+        default: return;
+    }
+    gpio_set_level(gpio, state);
+}
+```
+
+### Expansion Relays 5-8 (via MCP23017):
+```
+MCP23017 GPIO ──330Ω── PC817 LED ── Q_R ── RELAY
+```
+- MCP23017 được cách ly hoàn toàn khỏi relay drivers
+- Bảo vệ IO expander khỏi flyback voltage
+```
+
+## 5.1 RELAY STATUS LEDs (V3 UPGRADE)
+
+Mỗi relay có LED chỉ thị riêng (active-LOW):
+
+| Relay | GPIO | LED Component | Màu |
+|-------|------|---------------|------|
+| RELAY1 | GPIO26 | LED_R1 | Xanh |
+| RELAY2 | GPIO27 | LED_R2 | Xanh |
+| RELAY3 | GPIO25 | LED_R3 | Xanh |
+| RELAY4 | GPIO14 | LED_R4 | Xanh |
+| RELAY5-8 | MCP23017 | LED_R5-8 | Xanh |
+
+**Mạch LED Status:**
+```
+ESP32 GPIO ──1.5kΩ── LED_ANODE ── LED_CATHODE ── ESP32 GPIO
+                    (Active-LOW: GPIO LOW = LED ON)
+```
+
+**Lưu ý:** LED_R5-8 được điều khiển bởi MCP23017 IO expander.
+
+## 6. HARDWARE INTERLOCK
+
+RELAY_EN = POWER_GOOD AND BOOT_OK (diode-OR)
+
+```c
+// Software must also enforce interlock
+int can_control_relays(void) {
+    int power_ok = gpio_get_level(POWER_GOOD_GPIO);
+    int boot_ok = gpio_get_level(BOOT_OK_GPIO);
+    return power_ok && boot_ok;
+}
+
+void set_relay_safe(int relay_num, int state) {
+    if (!can_control_relays()) {
+        printf("ERROR: Hardware interlock active!\n");
+        return;
+    }
+    set_relay(relay_num, state);
+}
+```
+
+## 7. ADS1115 I2C ADDRESSES
+
+| Device | Address | I2C Bus |
+|--------|---------|---------|
+| ADS1115 | 0x48 (ADDR → GND) | I2C0 (GPIO21/SDA, GPIO22/SCL) |
+| MCP23017 #1 | 0x20 (A0→GND, A1→GND, A2→GND) | I2C0 |
+| MCP23017 #2 | 0x21 (A0→VCC, A1→GND, A2→GND) | I2C0 |
+| BME280 | 0x76 (SDO→GND) | I2C0 (optional) |
+| OLED 0.96" | 0x3C (SA0→GND) | I2C0 (optional) |
+
+## 8. VIN_SENSE VOLTAGE DIVIDER (V4 FIXED)
+
+```
+VIN (12-24V) ──47kΩ──┬─── GPIO35 (ADC)
+                        │
+                       6.8kΩ
+                        │
+                       GND
+```
+
+**Calculation:**
+- Vout = VIN × (6.8k / (47k + 6.8k))
+- Vout = VIN × 0.126
+- VIN = 12V → Vout = 1.51V ✓
+- VIN = 24V → Vout = 3.02V ✓ (safe for 3.3V ADC)
+- VIN = 26V → Vout = 3.28V ✓ (max safe)
+
+**Bảo vệ:** D_VSENSE_CLAMP (BAT54S) + D_VBAT_TVS (SMBJ30A) bảo vệ GPIO35 khỏi overvoltage.
+
+## 9. SD CARD SPI
+
+| ESP32 GPIO | SD Signal |
+|-----------|-----------|
+| IO23 (MOSI) | DI |
+| IO19 (MISO) | DO |
+| IO18 (SCK) | CLK |
+| IO5 (CS) | CS |
+
+**Lưu ý:** Có series 22Ω trên tất cả các đường SPI.
+
+## 10. SERIAL BOOTLOADER
+
+Để flash firmware qua USB:
+1. Giữ BOOT button
+2. Nhấn RESET button
+3. Release RESET
+4. Release BOOT
+5. ESP32 vào bootloader mode
+6. Upload firmware qua esptool hoặc PlatformIO
+
+**Auto-reset:** Circuit CP2102 + BC847 transistors sẽ tự động handle bootloader entry khi sử dụng esptool.
+
+## 11. OTA UPDATE SAFETY (CRITICAL)
+
+### Dual-Partition OTA (REQUIRED)
+```c
+// OTA flow với rollback protection
+esp_err_t ota_update(const uint8_t *fw_data, size_t fw_size) {
+    // 1. Download to update partition
+    const esp_partition_t *update_partition = esp_ota_begin(
+        esp_ota_get_next_update_partition(NULL), OTA_SIZE_UNKNOWN);
+    
+    // 2. Write firmware
+    esp_ota_write(update_partition, fw_data, fw_size);
+    
+    // 3. Verify checksum
+    if (!verify_checksum(update_partition)) {
+        esp_ota_abort(update_partition);
+        return ESP_ERR_INVALID_CRC;
+    }
+    
+    // 4. Set boot partition
+    esp_ota_set_boot_partition(update_partition);
+    
+    // 5. Reboot
+    esp_restart();
+}
+
+// Rollback nếu boot failed
+void check_boot_partition(void) {
+    const esp_partition_t *running = esp_ota_get_running_partition();
+    const esp_partition_t *boot = esp_ota_get_boot_partition();
+    
+    if (boot != running) {
+        // Rollback triggered - boot failed
+        ESP_LOGW(TAG, "Rolling back to factory firmware");
+        esp_ota_set_boot_partition(running);
+        esp_restart();
+    }
+}
+```
+
+## 12. WATCHDOG TIMER ISR (REQUIRED)
+
+**⚠️ CRITICAL: Watchdog phải được kick trong ISR, không phải main loop**
+
+```c
+// Timer interrupt cho watchdog kick
+static void IRAM_ATTR watchdog_timer_isr(void *arg) {
+    static bool toggle = false;
+    gpio_set_level(WATCHDOG_KICK_GPIO, toggle ? 1 : 0);
+    toggle = !toggle;
+}
+
+void init_watchdog_isr(void) {
+    // Use hardware timer với high priority
+    timer_config_t config = {
+        .divider = 80,  // 1MHz
+        .counter_dir = TIMER_COUNT_UP,
+        .intr_type = TIMER_INTR_LEVEL,
+        .counter_en = TIMER_START,
+    };
+    timer_init(TIMER_GROUP_0, TIMER_0, &config);
+    timer_set_alarm_value(TIMER_GROUP_0, TIMER_0, 1000000); // 1 second
+    timer_enable_intr(TIMER_GROUP_0, TIMER_0);
+    timer_isr_register(TIMER_GROUP_0, TIMER_0, watchdog_timer_isr, 
+                        NULL, ESP_INTR_FLAG_IRAM, NULL);
+    timer_alarm_enable(TIMER_GROUP_0, TIMER_0);
+}
+```
+
+## 13. RELAY DEBOUNCE (REQUIRED)
+
+```c
+#define RELAY_DEBOUNCE_MS 200
+
+static uint32_t last_relay_change[8] = {0};
+
+esp_err_t set_relay_safe(int relay_num, int state) {
+    uint32_t now = esp_timer_get_time() / 1000;
+    
+    // Debounce check
+    if (now - last_relay_change[relay_num] < RELAY_DEBOUNCE_MS) {
+        ESP_LOGW(TAG, "Relay debounce - try again later");
+        return ESP_ERR_TIMEOUT;
+    }
+    
+    // Safety interlock check
+    if (!can_control_relays()) {
+        ESP_LOGW(TAG, "Hardware interlock active!");
+        return ESP_ERR_INVALID_STATE;
+    }
+    
+    // Set relay
+    gpio_set_level(get_relay_gpio(relay_num), state);
+    last_relay_change[relay_num] = now;
+    
+    ESP_LOGI(TAG, "Relay %d set to %s", relay_num, state ? "ON" : "OFF");
+    return ESP_OK;
+}
+```
+
+## 14. BOOT VERIFICATION (RECOMMENDED)
+
+```c
+bool verify_firmware_integrity(void) {
+    // Check factory reset flag
+    nvs_handle_t nvs;
+    esp_err_t err = nvs_open("config", NVS_READONLY, &nvs);
+    if (err == ESP_OK) {
+        uint8_t boot_count;
+        nvs_get_u8(nvs, "boot_count", &boot_count);
+        nvs_close(nvs);
+        
+        // If boot failed 3 times, go to recovery
+        if (boot_count >= 3) {
+            ESP_LOGE(TAG, "Boot failed 3 times - recovery mode");
+            return false;
+        }
+    }
+    return true;
+}
+
+void increment_boot_count(void) {
+    nvs_handle_t nvs;
+    nvs_open("config", NVS_READWRITE, &nvs);
+    uint8_t boot_count = 0;
+    nvs_get_u8(nvs, "boot_count", &boot_count);
+    nvs_set_u8(nvs, "boot_count", boot_count + 1);
+    nvs_commit(nvs);
+    nvs_close(nvs);
+}
+```
+
+---
+Generated: 2026-04-16
+Document: FIRMWARE_NOTES_v6.3.txt
