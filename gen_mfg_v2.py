@@ -120,7 +120,7 @@ def fmt(x, y):
 for x in range(5, 200, 10):
     for y in range(5, 150, 10):
         COMPONENTS.append((f"GV_{x}_{y}", "GNDVia", x, y, [
-            (1, 0, 0, 0.6, 0.6, 0.3, "circle", "GND_STAR"),
+            (1, 0, 0, 0.6, 0.6, 0.4, "circle", "GND_STAR"),
         ]))
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -609,12 +609,13 @@ def gen_drill():
     # Collect all drills
     drills = {}  # code -> list of (x, y)
     drill_sizes = {
-        0.3: "T1",  # Via 0.3mm drill
-        0.8: "T2",  # SMD pad 0.8mm
-        1.0: "T3",  # THT 1.0mm
-        1.2: "T4",  # THT 1.2mm
-        1.6: "T5",  # Relay/terminal 1.6mm
-        3.2: "T6",  # Mounting hole 3.2mm NPTH
+        0.4: "T1",  # Via 0.4mm drill (fab-friendly minimum)
+        0.6: "T2",  # THT 0.6mm (small connectors)
+        0.7: "T3",  # THT 0.7mm (3.81mm terminal block)
+        0.8: "T4",  # SMD pad 0.8mm
+        1.0: "T5",  # THT 1.0mm
+        1.2: "T6",  # THT 1.2mm (relay, terminal block)
+        3.2: "T7",  # Mounting hole 3.2mm NPTH
     }
     for code, dia in drill_sizes.items():
         drills[code] = []

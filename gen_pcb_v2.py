@@ -186,7 +186,7 @@ add_fp(fp("D_SMA", "D_OUT5V", "SS34",
 # Thermal vias under U2_5V
 for tx, ty in [(68, 38), (68, 35), (68, 32), (76, 38), (76, 35), (76, 32)]:
     add_fp(fp("VIA", f"TV_U2_5V_{tx}_{ty}", "",
-        tx, ty, [pad_tht(0, 0, 0.3, 0.6, 0.6)]))
+        tx, ty, [pad_tht(0, 0, 0.4, 0.6, 0.6)]))
 
 # ── BUCK #2 12V→3.3V (Z3: X:110-160, Y:5-50) ───────────────────────────
 add_fp(fp("SOIC-8E", "U3_3V3", "MP1584EN",
@@ -221,7 +221,7 @@ add_fp(fp("R_0805", "R_EN_3V3", "100k 1%",
 
 for tx, ty in [(108, 38), (108, 35), (108, 32), (116, 38), (116, 35), (116, 32)]:
     add_fp(fp("VIA", f"TV_U3_3V3_{tx}_{ty}", "",
-        tx, ty, [pad_tht(0, 0, 0.3, 0.6, 0.6)]))
+        tx, ty, [pad_tht(0, 0, 0.4, 0.6, 0.6)]))
 
 # ── RAIL SPLITTING (Z5: X:5-100, Y:65-115) ───────────────────────────────
 add_fp(fp("FB_0805", "FB_ESP", "BLM18PG121SN1",
@@ -713,7 +713,7 @@ class Trace:
                 f'(width {w}) (layer "{self.layer}.Cu") (net {net_id}) (uuid "{u_id}"))')
 
 class Via:
-    def __init__(self, net, x, y, drill=0.3, outer=0.6):
+    def __init__(self, net, x, y, drill=0.4, outer=0.6):
         self.net = net
         self.x = x; self.y = y
         self.drill = drill; self.outer = outer
@@ -759,7 +759,7 @@ VIAS = []
 def t(net, layer, x1, y1, x2, y2, w=0.25):
     TRACES.append(Trace(net, layer, x1, y1, x2, y2, w))
 
-def v(net, x, y, d=0.3, o=0.6):
+def v(net, x, y, d=0.4, o=0.6):
     VIAS.append(Via(net, x, y, d, o))
 
 # ── POWER TRACES (top layer, heavy copper) ──────────────────────────────────
@@ -1135,13 +1135,12 @@ def gen_pcb():
         f'    (pad_drill_size_pair 0.3 0.3)',
         f'    (pad_drill_size_min 0.3)',
         f'    (pad_drill_size_max 0.3)',
-        f'    (via_drill_size_pair 0.3 0.3)',
+        f'    (via_drill_size_pair 0.4 0.4)',
         f'    (via_drill_size_min 0.25)',
-        f'    (via_drill_size_max 0.3)',
-        f'    (min_track_width 0.25)',
-        f'    (default_via 0 0.3 0.6)',
-        f'    (default_viad 0.3 0.6)',
-        f'    (blindburried_via 0 0.3 0.6)',
+        f'    (via_drill_size_max 0.4)',
+        f'    (default_via 0 0.4 0.6)',
+        f'    (default_viad 0.4 0.6)',
+        f'    (blindburried_via 0 0.4 0.6)',
         f'    (viastackinclusions)',
         f'    (track_duct 0 0 1)',
         f'    (graphics_coordinate_system -0.5 0.5 0 0 1 0 0)',
@@ -1160,27 +1159,27 @@ def gen_pcb():
         f'      (clearance 0.2)',
         f'      (track_width 0.25)',
         f'      (via_dia 0.6)',
-        f'      (via_drill 0.3)',
-        f'      (uvia_dia 0.3)',
-        f'      (uvia_drill 0.3)',
+        f'      (via_drill 0.4)',
+        f'      (uvia_dia 0.4)',
+        f'      (uvia_drill 0.4)',
         f'    )',
         f'    (class "Power"',
         f'      (name "Power")',
         f'      (clearance 0.4)',
         f'      (track_width 1.0)',
-        f'      (via_dia 0.8)',
-        f'      (via_drill 0.4)',
-        f'      (uvia_dia 0.3)',
-        f'      (uvia_drill 0.3)',
-        f'    )',
-        f'    (class "HighVoltage"',
+         f'      (via_dia 0.8)',
+         f'      (via_drill 0.4)',
+         f'      (uvia_dia 0.4)',
+         f'      (uvia_drill 0.4)',
+         f'    )',
+         f'    (class "HighVoltage"',
         f'      (name "HighVoltage")',
         f'      (clearance 0.4)',
         f'      (track_width 0.6)',
         f'      (via_dia 0.6)',
-        f'      (via_drill 0.3)',
-        f'      (uvia_dia 0.3)',
-        f'      (uvia_drill 0.3)',
+        f'      (via_drill 0.4)',
+        f'      (uvia_dia 0.4)',
+        f'      (uvia_drill 0.4)',
         f'    )',
         f'  )',
     ])
