@@ -108,6 +108,147 @@ def fmt(x, y):
     return f"X{xi:010d}Y{yi:010d}"
 
 # ═══════════════════════════════════════════════════════════════════════════════
+# STROKE FONT — text rendered as line strokes in Gerber
+# Each character is a list of (x, y) offsets, drawn as line segments
+# Height=2.0mm, width=1.2mm, stroke_width=0.15mm
+# ═══════════════════════════════════════════════════════════════════════════════
+FONT_H = 2.0
+FONT_W = 1.2
+STROKE_W = 0.15
+
+CHAR_WIDTHS = {
+    ' ': 1.2, '!': 0.4, '"': 0.8, '#': 1.2, '$': 1.0, '%': 1.2,
+    '&': 1.2, "'": 0.3, '(': 0.5, ')': 0.5, '*': 1.0, '+': 1.0,
+    ',': 0.4, '-': 0.8, '.': 0.4, '/': 1.0,
+    '0': 1.0, '1': 0.6, '2': 1.0, '3': 1.0, '4': 1.0,
+    '5': 1.0, '6': 1.0, '7': 1.0, '8': 1.0, '9': 1.0,
+    ':': 0.4, ';': 0.4, '<': 1.0, '=': 1.0, '>': 1.0, '?': 1.0,
+    '@': 1.2, 'A': 1.0, 'B': 1.0, 'C': 1.0, 'D': 1.0,
+    'E': 1.0, 'F': 1.0, 'G': 1.0, 'H': 1.0, 'I': 0.6,
+    'J': 0.6, 'K': 1.0, 'L': 0.8, 'M': 1.2, 'N': 1.0,
+    'O': 1.0, 'P': 1.0, 'Q': 1.0, 'R': 1.0, 'S': 1.0,
+    'T': 1.0, 'U': 1.0, 'V': 1.0, 'W': 1.4, 'X': 1.0,
+    'Y': 1.0, 'Z': 1.0,
+    '[': 0.5, '\\': 1.0, ']': 0.5, '^': 0.8, '_': 1.0,
+    '`': 0.4,
+    'a': 1.0, 'b': 1.0, 'c': 1.0, 'd': 1.0,
+    'e': 1.0, 'f': 0.6, 'g': 1.0, 'h': 1.0, 'i': 0.4,
+    'j': 0.5, 'k': 1.0, 'l': 0.4, 'm': 1.4, 'n': 1.0,
+    'o': 1.0, 'p': 1.0, 'q': 1.0, 'r': 0.6, 's': 1.0,
+    't': 0.6, 'u': 1.0, 'v': 1.0, 'w': 1.4, 'x': 1.0,
+    'y': 1.0, 'z': 1.0,
+    '{': 0.6, '|': 0.4, '}': 0.6, '~': 1.0,
+}
+
+def char_strokes(c):
+    c = c.upper()
+    h, w = FONT_H, FONT_W
+    hw, qw, tw = w/2, w/4, w*0.1
+    hh, qh, th = h/2, h/4, h*0.1
+    S = []
+    if c == 'A': return [(0,0,'A'), (-hw,0,'A'), (0,h,'A'), (hw,0,'A'), (-qw,qh,'A'), (qw,qh,'A')]
+    if c == 'B': return [(0,0,'A'), (0,h,'A'), (w,th,'A'), (w,qh,'A'), (0,qh,'A'), (w,qh,'B'), (0,qh,'B'), (w,hh,'A'), (0,hh,'A'), (w,h-th,'A'), (0,h,'A')]
+    if c == 'C': return [(w,th,'A'), (qw,0,'A'), (-hw,0,'A'), (-hw,h,'A'), (qw,h,'A'), (w,h-th,'A')]
+    if c == 'D': return [(0,0,'A'), (0,h,'A'), (qw,h,'A'), (w,qh,'A'), (w,hh,'A'), (w,qh,'B'), (qw,0,'B'), (0,0,'B')]
+    if c == 'E': return [(w,0,'A'), (0,0,'A'), (0,h,'A'), (w,h,'A'), (0,hh,'A'), (qw,hh,'A')]
+    if c == 'F': return [(w,0,'A'), (0,0,'A'), (0,h,'A'), (0,hh,'A'), (qw,hh,'A')]
+    if c == 'G': return [(w,th,'A'), (qw,0,'A'), (-hw,0,'A'), (-hw,h,'A'), (qw,h,'A'), (w,h-th,'A'), (w,hh,'A'), (qw,hh,'A')]
+    if c == 'H': return [(0,0,'A'), (0,h,'A'), (0,hh,'A'), (w,hh,'A'), (w,0,'A'), (w,h,'A')]
+    if c == 'I': return [(qw,0,'A'), (qw,h,'A'), (0,0,'B'), (w,0,'B'), (0,h,'B'), (w,h,'B')]
+    if c == 'J': return [(qw,0,'A'), (qw,h-qw,'A'), (0,h-qw,'A'), (-hw,h-qw,'A'), (-hw,h-qw,'B'), (qw,h-qw,'B')]
+    if c == 'K': return [(0,0,'A'), (0,h,'A'), (w,h,'A'), (0,hh,'A'), (w,0,'A')]
+    if c == 'L': return [(0,0,'A'), (0,h,'A'), (w,h,'A')]
+    if c == 'M': return [(0,0,'A'), (0,h,'A'), (hw,hh,'A'), (w,h,'A'), (w,0,'A')]
+    if c == 'N': return [(0,0,'A'), (0,h,'A'), (w,0,'A'), (w,h,'A')]
+    if c == 'O': return [(0,0,'A'), (0,h,'A'), (w,h,'A'), (w,0,'A'), (0,0,'B'), (0,h,'B'), (w,h,'B'), (w,0,'B')]
+    if c == 'P': return [(0,0,'A'), (0,h,'A'), (w,h,'A'), (w,hh,'A'), (0,hh,'A')]
+    if c == 'Q': return [(0,0,'A'), (0,h,'A'), (w,h,'A'), (w,0,'A'), (0,0,'B'), (0,h,'B'), (w,h,'B'), (w,0,'B'), (qw,0,'A'), (w,qh,'A'), (w-qw,h-qw,'A')]
+    if c == 'R': return [(0,0,'A'), (0,h,'A'), (w,h,'A'), (w,hh,'A'), (0,hh,'A'), (qw,hh,'A'), (w,0,'A')]
+    if c == 'S': return [(w,th,'A'), (qw,0,'A'), (-hw,0,'A'), (-hw,hh,'A'), (0,hh,'A'), (qw,hh,'B'), (w,hh,'B'), (w,h-th,'A'), (qw,h,'A'), (-hw,h,'A'), (-hw,h,'B'), (qw,h,'B'), (w,h-th,'B')]
+    if c == 'T': return [(0,0,'A'), (w,0,'A'), (hw,0,'A'), (hw,h,'A')]
+    if c == 'U': return [(0,0,'A'), (0,h-qw,'A'), (qw,h,'A'), (w-qw,h,'A'), (w,0,'A')]
+    if c == 'V': return [(0,0,'A'), (hw,h,'A'), (w,0,'A')]
+    if c == 'W': return [(0,0,'A'), (qw,h,'A'), (hw,hh,'A'), (qw*3,h,'A'), (w,0,'A')]
+    if c == 'X': return [(0,0,'A'), (w,h,'A'), (None,None,'A'), (0,h,'A'), (w,0,'A')]
+    if c == 'Y': return [(0,0,'A'), (hw,hh,'A'), (w,0,'A'), (None,None,'A'), (hw,hh,'B'), (hw,h,'B')]
+    if c == 'Z': return [(0,0,'A'), (w,0,'A'), (0,h,'A'), (w,h,'A')]
+    if c == '.': return [(qw,th,'A'), (qw,th,'B')]
+    if c == ',': return [(qw,th,'A'), (qw-th,h,'A')]
+    if c == ':': return [(qw,th,'A'), (qw,qh,'A'), (qw,hh,'A')]
+    if c == '-': return [(tw,hh,'A'), (w-tw,hh,'A')]
+    if c == '+': return [(hw,th,'A'), (hw,h-th,'A'), (tw,hh,'A'), (w-tw,hh,'A')]
+    if c == '/': return [(w-tw,0,'A'), (tw,h,'A')]
+    if c == '=': return [(tw,qh,'A'), (w-tw,qh,'A'), (tw,hh,'A'), (w-tw,hh,'A')]
+    if c == '(': return [(w-tw,th,'A'), (qw,0,'A'), (qw,h,'A'), (w-tw,h-th,'A')]
+    if c == ')': return [(tw,th,'A'), (qw,0,'A'), (qw,h,'A'), (tw,h-th,'A')]
+    if c == '[': return [(qw,0,'A'), (0,0,'A'), (0,h,'A'), (qw,h,'A')]
+    if c == ']': return [(0,0,'A'), (qw,0,'A'), (qw,h,'A'), (0,h,'A')]
+    if c == '_': return [(0,th,'A'), (w,th,'A')]
+    if c == '\\': return [(tw,0,'A'), (w-tw,h,'A')]
+    if c == '|': return [(qw,0,'A'), (qw,h,'A')]
+    if c in '0123456789':
+        nd = {'0':[(0,0,'A'),(0,h,'A'),(w,h,'A'),(w,0,'A'),(0,0,'B'),(w,0,'B')],
+              '1':[(tw,th,'A'),(qw,0,'A'),(qw,h,'A'),(0,h-qw,'B'),(w,h-qw,'B')],
+              '2':[(0,th,'A'),(qw,0,'A'),(w,qh,'A'),(w,h,'A'),(0,h,'A'),(0,hh,'A'),(qw,hh,'B'),(w,hh,'B')],
+              '3':[(0,th,'A'),(qw,0,'A'),(w,qh,'A'),(qw,hh,'A'),(w,hh,'A'),(qw,h,'A'),(0,h,'A')],
+              '4':[(0,0,'A'),(0,hh,'A'),(w,hh,'A'),(w,0,'A'),(w,h,'A')],
+              '5':[(w,0,'A'),(0,0,'A'),(0,hh,'A'),(qw,hh,'A'),(w,hh,'B'),(w,h,'A'),(0,h,'A')],
+              '6':[(w,qh,'A'),(qw,h,'A'),(0,h,'A'),(0,0,'A'),(w,0,'A'),(w,qh,'B'),(0,qh,'B')],
+              '7':[(0,0,'A'),(w,0,'A'),(0,h,'A')],
+              '8':[(0,0,'A'),(0,h,'A'),(w,h,'A'),(w,0,'A'),(0,0,'B'),(w,0,'B'),(0,qh,'A'),(w,qh,'A'),(0,hh,'A'),(w,hh,'A'),(0,h,'B'),(w,h,'B')],
+              '9':[(w,h,'A'),(0,h,'A'),(0,hh,'A'),(w,hh,'A'),(0,0,'A'),(w,0,'A')],
+             }[c]
+        return nd
+    if c == ' ':
+        return []
+    if c == '*':
+        return [(hw,th,'A'),(hw,h-th,'A'),(tw,hh,'A'),(w-tw,hh,'A'),(hw,th,'B'),(tw,th,'B'),(w-tw,th,'B'),(hw,h-th,'B'),(tw,h-th,'B'),(w-tw,h-th,'B')]
+    return []
+
+def render_text(text, x, y, height=FONT_H, stroke_w=STROKE_W):
+    """Render text as line strokes. Returns list of Gerber D02/D01 commands."""
+    result = []
+    cx = x
+    for ch in text:
+        if ch == ' ':
+            cw = CHAR_WIDTHS.get(' ', FONT_W)
+            cx += cw
+            continue
+        strokes = char_strokes(ch)
+        if not strokes:
+            cw = CHAR_WIDTHS.get(ch, FONT_W)
+            cx += cw
+            continue
+        cw = CHAR_WIDTHS.get(ch.upper(), FONT_W)
+        scale = height / FONT_H
+        for sx, sy, action in strokes:
+            if sx is None:
+                continue
+            gx = cx + sx * scale
+            gy = y + (FONT_H - sy) * scale
+            if action == 'A':
+                if not result or result[-1][0] != 'line' or result[-1][1] != (gx, gy):
+                    result.append(('move', gx, gy))
+            elif action == 'B':
+                result.append(('line', gx, gy))
+        cx += cw
+    return result
+
+def text_to_gerber(text, x, y, height=2.0, stroke_w=0.15):
+    """Convert text string to Gerber line commands. Returns list of Gerber strings."""
+    commands = render_text(text, x, y, height)
+    lines = [f"%ADD10C,{stroke_w:.4f}*%"]
+    prev_x, prev_y = None, None
+    for action, gx, gy in commands:
+        if action == 'move':
+            lines.append(f"G01*\nX{fmt(gx,gy)[1:]}D02*\n")
+            prev_x, prev_y = gx, gy
+        elif action == 'line':
+            lines.append(f"X{fmt(gx,gy)[1:]}D01*\n")
+            prev_x, prev_y = gx, gy
+    return lines
+
+# ═══════════════════════════════════════════════════════════════════════════════
 # COMPONENT DATABASE — All footprints with pad positions
 # Format: (ref, value, cx, cy, [pads])
 # Pad: (num, px, py, w, h, drill, shape, net)
@@ -518,7 +659,6 @@ def gen_silkscreen(layer):
         if ref.startswith("MH_") or ref.startswith("TP_") or ref.startswith("TV_") or ref.startswith("GV_"):
             continue
         if not pads: continue
-        # Get bounding box
         xs = [cx + px for _, _, _, px, py, drill, shape, net in pads]
         ys = [cy + py for _, _, _, px, py, drill, shape, net in pads]
         x0, x1 = min(xs), max(xs)
@@ -526,7 +666,6 @@ def gen_silkscreen(layer):
         margin = 0.3
         x0 -= margin; y0 -= margin; x1 += margin; y1 += margin
 
-        # Draw outline rectangle
         lines.append(f"G01*\nX{fmt(x0,y0)[1:]}Y{fmt(x0,y0)[1:]}D02*\n")
         lines.append(f"X{fmt(x1,y0)[1:]}Y{fmt(x1,y0)[1:]}D01*\n")
         lines.append(f"X{fmt(x1,y1)[1:]}Y{fmt(x1,y1)[1:]}D01*\n")
@@ -540,6 +679,28 @@ def gen_silkscreen(layer):
         x2, y2 = BOARD_EDGE[i+1]
         lines.append(f"G01*\nX{fmt(x1,y1)[1:]}Y{fmt(x1,y1)[1:]}D02*\n")
         lines.append(f"X{fmt(x2,y2)[1:]}Y{fmt(x2,y2)[1:]}D01*\n")
+
+    if layer == "F":
+        labels = [
+            ("ECOSYNTECH V6.3 INDUSTRIAL PRO", 100, 146.5, 2.5, 0.3),
+            ("REV 6.3 FINAL  |  2-LAYER  |  ENIG  |  FR-4 TG130", 100, 143.5, 1.8, 0.2),
+            ("ECO-SYNTECH GLOBAL  |  ECOSYNTECH68VN  |  2026-04-16", 100, 3, 1.5, 0.15),
+            ("CAUTION: HIGH VOLTAGE 220VAC", 100, 97, 2.2, 0.25),
+            ("ISOLATION SLOT", 100, 84.5, 1.0, 0.12),
+            ("ANTENNA KEEPOUT ZONE", 165, 77, 1.0, 0.12),
+            ("ESP32 MODULE", 165, 74, 0.8, 0.1),
+            ("POWER SECTION", 50, 12, 1.0, 0.12),
+            ("RELAY ZONE", 100, 135, 1.0, 0.12),
+            ("CAUTION 220VAC", 100, 95, 1.5, 0.15),
+            ("DO NOT REMOVE - ARC HAZARD", 100, 99, 1.2, 0.12),
+            ("BOTTOM LAYER 2OZ COPPER", 100, 80.5, 1.0, 0.1),
+            ("THAY DUNG GIA TRI CAU CHI - F1", 10, 12, 1.2, 0.12),
+            ("KIEM TRA CUOC TINH TRUOC KHI CAP NGUON", 35, 12, 1.0, 0.1),
+            ("I2C BUS", 50, 57, 0.8, 0.1),
+            ("ANALOG SECTION", 90, 59, 0.8, 0.1),
+        ]
+        for text, tx, ty, sz, sw in labels:
+            lines.extend(text_to_gerber(text, tx, ty, sz, sw))
 
     lines.append("M02*")
     return '\n'.join(lines)
@@ -691,9 +852,9 @@ Board Thickness:       1.6mm (±0.1mm tolerance)
 Number of Layers:      2 layers (F.Cu + B.Cu)
 Minimum Line Width:    0.15mm (signal), 0.25mm (default)
 Minimum Spacing:      0.2mm (default), 0.4mm (high voltage zones)
-Minimum Drill:         0.3mm (PTH), 3.2mm (NPTH mounting holes)
+Minimum Drill:         0.4mm (PTH), 3.2mm (NPTH mounting holes)
 Finished Copper:       1 oz (35μm) TOP layer
-                      1 oz (35μm) BOTTOM layer (2 oz RECOMMENDED under relay zone)
+                      1 oz (35μm) BOTTOM layer (2 oz REQUIRED under relay zone)
 Surface Finish:        ENIG (Electroless Nickel Immersion Gold) — MANDATORY
                         Nickel: 3-6μm
                         Gold: 0.05-0.1μm
@@ -718,7 +879,7 @@ UL Rating:             Preferred (FR-4 Tg130°C)
 2.2 Copper Quality
   - Base copper: 1 oz/sqft (35μm) minimum
   - **IMPORTANT**: Bottom layer (B.Cu) under relay section (X:5-100, Y:82-145mm):
-    Use 2 oz copper (70μm) due to high current through relay coil driver traces
+    Use 2 oz copper (70μm) REQUIRED due to high current through relay coil driver traces
   - All copper features must meet IPC Class 2 standards
   - Minimum annular ring: 0.15mm for PTH, 0.1mm for vias
   - Pad lift test: 5 lbs minimum
@@ -728,7 +889,7 @@ UL Rating:             Preferred (FR-4 Tg130°C)
   - All PTH holes MUST be plated through (copper plated)
   - NPTH mounting holes: 4 x 3.2mm (non-plated, clean deburr)
     Positions: (5,5), (5,145), (195,5), (195,145) mm
-  - Via holes: 0.3mm drill → 0.6mm outer pad
+  - Via holes: 0.4mm drill → 0.6mm outer pad
   - SMD pad holes: N/A (surface mount)
   - THT pad holes: 0.8mm (for connectors), 1.0mm (for USB), 1.6mm (for relays)
   - All holes must be clean, no epoxy voids, no barrel cracks
@@ -790,8 +951,14 @@ UL Rating:             Preferred (FR-4 Tg130°C)
   - Keepout applies to all layers (F.Cu, B.Cu, F.SilkS, B.SilkS)
   - Purpose: RF antenna radiation pattern must be unobstructed
 
-3.3 Conformal Coating Ready
-  - Board surface should be clean and dry
+3.3 Conformal Coating Specification
+  - Material: Humi-Seal 1A33 or equivalent (acrylic conformal coating, UL94 V-0)
+  - Application: Spray or dip coat, 1-3 coats to achieve 25-75μm thickness
+  - Coating thickness: 25-75μm (1-3 mils) after cure
+  - Dielectric strength: >1500 V/mil
+  - Operating temp range: -40°C to +130°C
+  - IPC-CC-830B compliant
+  - Board surface should be clean and dry before coating
   - No solder mask on vias (open for coating penetration)
   - Board should pass ionic cleanliness test (max 1.56μg/inch NaCl equivalent)
   - Exclude zones for conformal coating:
@@ -812,7 +979,7 @@ UL Rating:             Preferred (FR-4 Tg130°C)
 ================================================================================
 Class: Default
   Track width: 0.25mm
-  Via diameter: 0.6mm, drill: 0.3mm
+  Via diameter: 0.6mm, drill: 0.4mm
   Clearance: 0.2mm
 
 Class: Power
@@ -881,7 +1048,7 @@ B. RELAY ISOLATION SLOT IS A ROUTED CUTOUT
 
 C. BOTTOM LAYER COPPER WEIGHT
    Standard 1 oz bottom layer OK for most of board.
-   But relay driver area (X:140-185mm, Y:82-145mm) should use 2 oz
+   But relay driver area (X:140-185mm, Y:82-145mm) is REQUIRED to use 2 oz
    due to relay coil current (~70mA per relay driver transistor).
 
 D. FLYING PROBE TEST REQUIRED
@@ -1155,7 +1322,7 @@ GERBER_JOB = """{
         "LayerName": "B.Cu",
         "Plot": true,
         "CopperWeight": "1 oz",
-        "Notes": "2 oz recommended for relay zone X:140-185mm Y:82-145mm",
+        "Notes": "2 oz REQUIRED for relay zone X:140-185mm Y:82-145mm",
         "PowerRailConnections": ["GND_STAR"]
       }
     },
@@ -1164,7 +1331,7 @@ GERBER_JOB = """{
     "MinimumSolderMaskClearance": 0.05,
     "Vias": {
       "Plated": true,
-      "DrillFinishedSize": 0.3,
+      "DrillFinishedSize": 0.4,
       "OuterDiameter": 0.6
     }
   },
