@@ -977,52 +977,52 @@ COMPONENTS = [
         ('2', 0, -2.54, 1.4, 1.4, 1.2, 'oval', 'GND_STAR'),
         ('3', 7.62, -2.54, 1.4, 1.4, 1.2, 'oval', 'GND_STAR'),
     ]),
-    ("TP_+12V_PRO", "+12V_PROTECTED", 5, 0, [
+    ("TP_12V", "+12V_PROTECTED", 5, 0, [
         ('1', 0, 0, 1.0, 1.0, 0, 'circle', 'GND_STAR'),
     ]),
-    ("TP_+5V_SYS", "+5V_SYS", 5, 3, [
+    ("TP_5V", "+5V_SYS", 5, 3, [
         ('1', 0, 0, 1.0, 1.0, 0, 'circle', 'GND_STAR'),
     ]),
-    ("TP_+3V3_ESP", "+3V3_ESP", 5, 6, [
+    ("TP_3V3ESP", "+3V3_ESP", 5, 6, [
         ('1', 0, 0, 1.0, 1.0, 0, 'circle', 'GND_STAR'),
     ]),
-    ("TP_+3V3_ANA", "+3V3_ANA", 5, 9, [
+    ("TP_3V3ANA", "+3V3_ANA", 5, 9, [
         ('1', 0, 0, 1.0, 1.0, 0, 'circle', 'GND_STAR'),
     ]),
-    ("TP_GND_STAR", "GND_STAR", 5, 12, [
+    ("TP_GND", "GND_STAR", 5, 12, [
         ('1', 0, 0, 1.0, 1.0, 0, 'circle', 'GND_STAR'),
     ]),
-    ("TP_UART0_TX", "UART0_TX", 5, 15, [
+    ("TP_TX", "UART0_TX", 5, 15, [
         ('1', 0, 0, 1.0, 1.0, 0, 'circle', 'GND_STAR'),
     ]),
-    ("TP_UART0_RX", "UART0_RX", 5, 18, [
+    ("TP_RX", "UART0_RX", 5, 18, [
         ('1', 0, 0, 1.0, 1.0, 0, 'circle', '+12V_IN'),
     ]),
-    ("TP_EN_ESP", "EN_ESP", 5, 21, [
+    ("TP_EN", "EN_ESP", 5, 21, [
         ('1', 0, 0, 1.0, 1.0, 0, 'circle', 'GND_STAR'),
     ]),
-    ("TP_BOOT_ESP", "BOOT_ESP", 5, 24, [
+    ("TP_BOOT", "BOOT_ESP", 5, 24, [
         ('1', 0, 0, 1.0, 1.0, 0, 'circle', 'GND_STAR'),
     ]),
-    ("TP_I2C_SCL", "I2C_SCL", 5, 27, [
+    ("TP_SCL", "I2C_SCL", 5, 27, [
         ('1', 0, 0, 1.0, 1.0, 0, 'circle', 'GND_STAR'),
     ]),
-    ("TP_I2C_SDA", "I2C_SDA", 5, 30, [
+    ("TP_SDA", "I2C_SDA", 5, 30, [
         ('1', 0, 0, 1.0, 1.0, 0, 'circle', 'GND_STAR'),
     ]),
-    ("TP_WATCHDOG", "WATCHDOG_KICK", 5, 33, [
+    ("TP_WD", "WATCHDOG_KICK", 5, 33, [
         ('1', 0, 0, 1.0, 1.0, 0, 'circle', 'GND_STAR'),
     ]),
-    ("TP_POWER_GO", "POWER_GOOD", 5, 36, [
+    ("TP_PWRGOOD", "POWER_GOOD", 5, 36, [
         ('1', 0, 0, 1.0, 1.0, 0, 'circle', 'GND_STAR'),
     ]),
-    ("TP_RELAY_EN", "RELAY_EN", 5, 39, [
+    ("TP_RLY_EN", "RELAY_EN", 5, 39, [
         ('1', 0, 0, 1.0, 1.0, 0, 'circle', 'GND_STAR'),
     ]),
     ("TP_BOOT_OK", "BOOT_OK", 5, 42, [
         ('1', 0, 0, 1.0, 1.0, 0, 'circle', 'GND_STAR'),
     ]),
-    ("TP_WATCHDOG", "WATCHDOG_RST", 5, 45, [
+    ("TP_WD_RST", "WATCHDOG_RST", 5, 45, [
         ('1', 0, 0, 1.0, 1.0, 0, 'circle', 'GND_STAR'),
     ]),
     ("J_PWR_EXT", "CONN_7.62_2P", 190, 20, [

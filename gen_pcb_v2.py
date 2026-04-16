@@ -638,11 +638,30 @@ for i, y in enumerate([93, 110, 127, 144]):
 
 # ── TEST POINTS ─────────────────────────────────────────────────────────────
 tp_y = 0
+TP_NAMES = {
+    "+12V_PROTECTED": "TP_12V",
+    "+5V_SYS": "TP_5V",
+    "+3V3_ESP": "TP_3V3ESP",
+    "+3V3_ANA": "TP_3V3ANA",
+    "GND_STAR": "TP_GND",
+    "UART0_TX": "TP_TX",
+    "UART0_RX": "TP_RX",
+    "EN_ESP": "TP_EN",
+    "BOOT_ESP": "TP_BOOT",
+    "I2C_SCL": "TP_SCL",
+    "I2C_SDA": "TP_SDA",
+    "WATCHDOG_KICK": "TP_WD",
+    "POWER_GOOD": "TP_PWRGOOD",
+    "RELAY_EN": "TP_RLY_EN",
+    "BOOT_OK": "TP_BOOT_OK",
+    "WATCHDOG_RST": "TP_WD_RST",
+}
 for net in ["+12V_PROTECTED", "+5V_SYS", "+3V3_ESP", "+3V3_ANA", "GND_STAR",
              "UART0_TX", "UART0_RX", "EN_ESP", "BOOT_ESP",
              "I2C_SCL", "I2C_SDA", "WATCHDOG_KICK",
              "POWER_GOOD", "RELAY_EN", "BOOT_OK", "WATCHDOG_RST"]:
-    add_fp(fp("TESTPOINT", f"TP_{net[:8]}", net,
+    tp_ref = TP_NAMES.get(net, f"TP_{net[:6]}")
+    add_fp(fp("TESTPOINT", tp_ref, net,
         5, tp_y, [pad_smd_circle(0, 0, 1.0)], smd=True))
     tp_y += 3
 
