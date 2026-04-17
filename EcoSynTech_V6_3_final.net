@@ -1,0 +1,714 @@
+# Netlist for EcoSynTech PCB v6.3 Final
+# Generated: 2026-04-16
+# Project: EcoSynTech_PCB_for_IOT
+# Revision: 6.3 Final
+# Tool: KiCad Schematic Export
+# ============================================================================
+# 
+# This netlist is generated from schematic sheets S01-S20
+# Format: KiCad Standard Netlist (SPICE-style)
+# 
+# ============================================================================
+
+* sheet 1: S01_Power_Input.kicad_sch
+
+* Power Input Netlist
++NET +12V_IN TB1-1
++NET GND GND
+
+* sheet 2: S02_Buck_5V.kicad_sch
+
++NET +12V_PROTECTED
++NET +5V_MAIN
++NET GND
+
+* sheet 3: S03_Buck_3V3.kicad_sch
+
++NET +3V3_MAIN
++NET GND
+
+* sheet 4: S04_Rail_Split.kicad_sch
+
++NET +3V3_ESP
++NET +3V3_ANA
++NET GND
+
+* sheet 5: S05_OR_Diodes.kicad_sch
+
++NET +5V_SYS
++NET +5V_USB
++NET GND
+
+* sheet 6: S06_ESP32_Core.kicad_sch
+
++NET GPIO1
++NET GPIO3
++NET GPIO4
++NET GPIO5
++NET GPIO14
++NET GPIO16
++NET GPIO17
++NET GPIO18
++NET GPIO19
++NET GPIO21
++NET GPIO22
++NET GPIO23
++NET GPIO25
++NET GPIO26
++NET GPIO27
++NET GPIO32
++NET GPIO33
++NET GPIO35
++NET EN_ESP
++NET BOOT_ESP
++NET +3V3_ESP
++NET GND
+
+* sheet 7: S07_USB_UART.kicad_sch
+
++NET UART_TX
++NET UART_RX
++NET DTR
++NET RTS
+
+* sheet 8: S08_Watchdog.kicad_sch
+
++NET WATCHDOG_KICK
++NET WATCHDOG_RST
++NET EN_ESP
++NET +3V3_ESP
+
+* sheet 9: S09_Relay_Drivers.kicad_sch
+
++NET +5V_RELAY_RAW
++NET RELAY1_DRV
++NET RELAY2_DRV
++NET RELAY3_DRV
++NET RELAY4_DRV
++NET +5V_MAIN
+
+* sheet 10: S10_DHT22.kicad_sch
+
++NET DHT22_DATA
++NET +3V3_ANA
+
+* sheet 11: S11_DS18B20.kicad_sch
+
++NET DS18B20_DATA
++NET +3V3_ANA
+
+* sheet 12: S12_Soil_ADS.kicad_sch
+
++NET SOIL_RAW
++NET ADS_A3
++NET +3V3_ANA
+
+* sheet 13: S13_Vin_Sense.kicad_sch
+
++NET VIN_SENSE
++NET VIN_SENSE_RAW
++NET GPIO35
+
+* sheet 14: S14_ADS1115.kicad_sch
+
++NET ADS_A0
++NET ADS_A1
++NET ADS_A2
++NET ADS_A3
++NET I2C_SDA
++NET I2C_SCL
++NET +3V3_ANA
+
+* sheet 15: S15_I2C_Bus.kicad_sch
+
++NET I2C_SDA
++NET I2C_SCL
++NET +3V3_ANA
+
+* sheet 16: S16_MicroSD.kicad_sch
+
++NET SD_CS
++NET SD_SCK
++NET SD_MOSI
++NET SD_MISO
++NET SD_DET
++NET +3V3_ESP
+
+* sheet 17: S17_IO_Expanders.kicad_sch
+
++NET I2C_SDA
++NET I2C_SCL
++NET EXP1_INT
++NET EXP2_INT
+
+* sheet 18: S18_Exp_Relays.kicad_sch
+
++NET +5V_RELAY_RAW
+
+* sheet 19: S19_Debug_TP.kicad_sch
+
++NET TP_TEST
+
+* sheet 20: S20_External_Conn.kicad_sch
+
++NET RELAY1_COM
++NET RELAY1_NO
++NET RELAY1_NC
++NET RELAY2_COM
++NET RELAY2_NO
++NET RELAY2_NC
++NET RELAY3_COM
++NET RELAY3_NO
++NET RELAY3_NC
++NET RELAY4_COM
++NET RELAY4_NO
++NET RELAY4_NC
+
+# ============================================================================
+# Full KiCad Netlist Format - XML
+# ============================================================================
+
+(export (version "6.0") (generator "KiCad schematic export") (generator_version "6.0")
+ (design (title "EcoSynTech PCB v6.3") (date "2026-04-16") (company "EcoSynTech Global") (rev "6.3"))
+ (components)
+ (nets
+  (net (code "1") (name "+12V_IN")
+   (node (ref "TB1") (pin "1"))
+   (node (ref "F1") (pin "1"))
+  )
+  (net (code "2") (name "+12V_PROTECTED")
+   (node (ref "F1") (pin "2"))
+   (node (ref "Q_PROTECT") (pin "D"))
+  )
+  (net (code "3") (name "+5V_MAIN")
+   (node (ref "U2_5V") (pin "VOUT"))
+   (node (ref "R_RELAY_LIM") (pin "1"))
+  )
+  (net (code "4") (name "+5V_RELAY_RAW")
+   (node (ref "R_RELAY_LIM") (pin "2"))
+   (node (ref "C_RELAY_BULK") (pin "1"))
+   (node (ref "D_RELAY_TVS") (pin "1"))
+   (node (ref "Q_R1") (pin "C"))
+   (node (ref "Q_R2") (pin "C"))
+   (node (ref "Q_R3") (pin "C"))
+   (node (ref "Q_R4") (pin "C"))
+   (node (ref "RELAY1") (pin "2"))
+   (node (ref "RELAY2") (pin "2"))
+   (node (ref "RELAY3") (pin "2"))
+   (node (ref "RELAY4") (pin "2"))
+  )
+  (net (code "5") (name "+3V3_MAIN")
+   (node (ref "U3_3V3") (pin "VOUT"))
+  )
+  (net (code "6") (name "+3V3_ESP")
+   (node (ref "FB_ESP") (pin "2"))
+   (node (ref "U_ESP32") (pin "3"))
+   (node (ref "C_ESP_DEC1") (pin "1"))
+   (node (ref "C_ESP_DEC2") (pin "1"))
+   (node (ref "U_USB_UART") (pin "VCC"))
+   (node (ref "U_WD") (pin "VCC"))
+   (node (ref "U_SDCARD") (pin "VCC"))
+   (node (ref "U_EXP1") (pin "VCC"))
+   (node (ref "U_EXP2") (pin "VCC"))
+  )
+  (net (code "7") (name "+3V3_ANA")
+   (node (ref "FB_ANA") (pin "2"))
+   (node (ref "U_DHT22") (pin "1"))
+   (node (ref "U_DS18B20") (pin "1"))
+   (node (ref "U_ADS") (pin "VCC"))
+   (node (ref "U_BME280") (pin "1"))
+   (node (ref "U_OLED") (pin "1"))
+   (node (ref "R_I2C_SCL_PU") (pin "1"))
+   (node (ref "R_I2C_SDA_PU") (pin "1"))
+  )
+  (net (code "8") (name "GND")
+   (node (ref "TB1") (pin "2"))
+   (node (ref "GDT1") (pin "2"))
+   (node (ref "MOV1") (pin "2"))
+   (node (ref "C1") (pin "2"))
+   (node (ref "C2") (pin "2"))
+   (node (ref "U2_5V") (pin "GND"))
+   (node (ref "CIN_5V1") (pin "2"))
+   (node (ref "CIN_5V2") (pin "2"))
+   (node (ref "COUT_5V1") (pin "2"))
+   (node (ref "COUT_5V2") (pin "2"))
+   (node (ref "COUT_5V3") (pin "2"))
+   (node (ref "U3_3V3") (pin "GND"))
+   (node (ref "CIN_3V31") (pin "2"))
+   (node (ref "CIN_3V32") (pin "2"))
+   (node (ref "COUT_3V31") (pin "2"))
+   (node (ref "COUT_3V32") (pin "2"))
+   (node (ref "COUT_3V33") (pin "2"))
+   (node (ref "C_ESP_DEC1") (pin "2"))
+   (node (ref "C_ESP_DEC2") (pin "2"))
+   (node (ref "C_ESP_DEC3") (pin "2"))
+   (node (ref "C_ESP_DEC4") (pin "2"))
+   (node (ref "C_ANA1") (pin "2"))
+   (node (ref "C_ANA2") (pin "2"))
+  )
+  (net (code "9") (name "RELAY1_DRV")
+   (node (ref "Q_R1") (pin "B"))
+   (node (ref "U_ESP32") (pin "26"))
+  )
+  (net (code "10") (name "RELAY2_DRV")
+   (node (ref "Q_R2") (pin "B"))
+   (node (ref "U_ESP32") (pin "27"))
+  )
+  (net (code "11") (name "RELAY3_DRV")
+   (node (ref "Q_R3") (pin "B"))
+   (node (ref "U_ESP32") (pin "25"))
+  )
+  (net (code "12") (name "RELAY4_DRV")
+   (node (ref "Q_R4") (pin "B"))
+   (node (ref "U_ESP32") (pin "14"))
+  )
+  (net (code "13") (name "DHT22_DATA")
+   (node (ref "U_DHT22") (pin "2"))
+   (node (ref "R_DHT_PU") (pin "1"))
+   (node (ref "U_ESP32") (pin "33"))
+  )
+  (net (code "14") (name "DS18B20_DATA")
+   (node (ref "U_DS18B20") (pin "2"))
+   (node (ref "R_DS_PU") (pin "1"))
+   (node (ref "U_ESP32") (pin "32"))
+  )
+  (net (code "15") (name "WATCHDOG_KICK")
+   (node (ref "U_WD") (pin "DONE"))
+   (node (ref "U_ESP32") (pin "4"))
+  )
+  (net (code "16") (name "WATCHDOG_RST")
+   (node (ref "U_WD") (pin "RST"))
+   (node (ref "EN_ESP"))
+  )
+  (net (code "17") (name "I2C_SDA")
+   (node (ref "U_ESP32") (pin "21"))
+   (node (ref "U_ADS") (pin "SDA"))
+   (node (ref "U_BME280") (pin "4"))
+   (node (ref "U_OLED") (pin "2"))
+   (node (ref "U_EXP1") (pin "13"))
+   (node (ref "U_EXP2") (pin "13"))
+  )
+  (net (code "18") (name "I2C_SCL")
+   (node (ref "U_ESP32") (pin "22"))
+   (node (ref "U_ADS") (pin "SCL"))
+   (node (ref "U_BME280") (pin "3"))
+   (node (ref "U_OLED") (pin "3"))
+   (node (ref "U_EXP1") (pin "12"))
+   (node (ref "U_EXP2") (pin "12"))
+  )
+  (net (code "19") (name "SD_CS")
+   (node (ref "U_ESP32") (pin "5"))
+   (node (ref "U_SDCARD") (pin "2"))
+  )
+  (net (code "20") (name "SD_SCK")
+   (node (ref "U_ESP32") (pin "18"))
+   (node (ref "U_SDCARD") (pin "5"))
+  )
+  (net (code "21") (name "SD_MOSI")
+   (node (ref "U_ESP32") (pin "23"))
+   (node (ref "U_SDCARD") (pin "3"))
+  )
+  (net (code "22") (name "SD_MISO")
+   (node (ref "U_ESP32") (pin "19"))
+   (node (ref "U_SDCARD") (pin "7"))
+  )
+  (net (code "23") (name "UART_TX")
+   (node (ref "U_ESP32") (pin "1"))
+   (node (ref "U_USB_UART") (pin "TXD"))
+  )
+  (net (code "24") (name "UART_RX")
+   (node (ref "U_ESP32") (pin "3"))
+   (node (ref "U_USB_UART") (pin "RXD"))
+  )
+  (net (code "25") (name "EN_ESP")
+   (node (ref "U_ESP32") (pin "EN"))
+   (node (ref "Q_RST") (pin "C"))
+   (node (ref "U_WD") (pin "RST"))
+  )
+  (net (code "26") (name "BOOT_ESP")
+   (node (ref "U_ESP32") (pin "GPIO0"))
+   (node (ref "Q_BOOT") (pin "C"))
+  )
+  (net (code "27") (name "LED_WIFI")
+   (node (ref "U_ESP32") (pin "16"))
+   (node (ref "LED_WIFI") (pin "1"))
+  )
+  (net (code "28") (name "LED_MQTT")
+   (node (ref "U_ESP32") (pin "17"))
+   (node (ref "LED_MQTT") (pin "1"))
+  )
+  (net (code "29") (name "VIN_SENSE")
+   (node (ref "R_VTOP") (pin "1"))
+   (node (ref "R_VBOT") (pin "1"))
+   (node (ref "U_ESP32") (pin "35"))
+  )
+  (net (code "30") (name "ADS_A0")
+   (node (ref "J_AIN") (pin "1"))
+   (node (ref "U_ADS") (pin "A0"))
+  )
+  (net (code "31") (name "ADS_A1")
+   (node (ref "J_AIN") (pin "2"))
+   (node (ref "U_ADS") (pin "A1"))
+  )
+  (net (code "32") (name "ADS_A2")
+   (node (ref "J_AIN") (pin "3"))
+   (node (ref "U_ADS") (pin "A2"))
+  )
+  (net (code "33") (name "ADS_A3")
+   (node (ref "J_SOIL") (pin "2"))
+   (node (ref "U_ADS") (pin "A3"))
+  )
+ )
+)
+
+# ============================================================================
+# Component to Net Mapping (Key Signals Only)
+# ============================================================================
+
+# Power Management
+TB1-1 -> +12V_IN
+TB1-2 -> GND
+F1-1 -> +12V_IN
+F1-2 -> +12V_PROTECTED
+GDT1-1 -> +12V_IN
+GDT1-2 -> GND (parallel)
+MOV1-1 -> +12V_IN
+MOV1-2 -> GND (parallel)
+D_TVS1-1 -> +12V_PROTECTED
+D_TVS1-2 -> GND
+Q_PROTECT-1 -> +12V_PROTECTED
+Q_PROTECT-2 -> GND (source)
+Q_PROTECT-3 -> +12V_IN (gate)
+C1-1 -> +12V_PROTECTED
+C1-2 -> GND
+C2-1 -> +12V_PROTECTED
+C2-2 -> GND
+
+# Buck 5V (MP1584 #1)
+U2_5V-1 -> GND
+U2_5V-2 -> +5V_MAIN
+U2_5V-3 -> +12V_PROTECTED
+U2_5V-4 -> +12V_PROTECTED
+U2_5V-5 -> GND
+U2_5V-6 -> +12V_PROTECTED (EN)
+U2_5V-7 -> +5V_MAIN (FB)
+U2_5V-8 -> GND
+CIN_5V1-1 -> +12V_PROTECTED
+CIN_5V1-2 -> GND
+CIN_5V2-1 -> +12V_PROTECTED
+CIN_5V2-2 -> GND
+L_5V-1 -> +5V_MAIN
+L_5V-2 -> COUT_5V1-1
+COUT_5V1-1 -> +5V_MAIN
+COUT_5V1-2 -> GND
+COUT_5V2-1 -> +5V_MAIN
+COUT_5V2-2 -> GND
+COUT_5V3-1 -> +5V_MAIN
+COUT_5V3-2 -> GND
+D_OUT5V-1 -> GND
+D_OUT5V-2 -> +5V_MAIN
+
+# Buck 3.3V (MP1584 #2)
+U3_3V3-1 -> GND
+U3_3V3-2 -> +3V3_MAIN
+U3_3V3-3 -> +12V_PROTECTED (VIN)
+U3_3V3-4 -> +12V_PROTECTED (SW)
+U3_3V3-5 -> GND
+U3_3V3-6 -> +12V_PROTECTED (EN)
+U3_3V3-7 -> +3V3_MAIN (FB)
+U3_3V3-8 -> GND
+
+# Rail Split Ferrite Beads
+FB_ESP-1 -> +3V3_MAIN
+FB_ESP-2 -> +3V3_ESP
+FB_ANA-1 -> +3V3_MAIN
+FB_ANA-2 -> +3V3_ANA
+
+# OR-ing Diodes +5V_SYS
+D_USB-1 -> +5V_USB
+D_USB-2 -> +5V_SYS
+D_MAIN-1 -> +5V_MAIN
+D_MAIN-2 -> +5V_SYS
+
+# ESP32-WROOM-32E
+U_ESP32-1 -> UART_TX
+U_ESP32-3 -> UART_RX
+U_ESP32-4 -> WATCHDOG_KICK
+U_ESP32-5 -> SD_CS
+U_ESP32-14 -> RELAY4_DRV
+U_ESP32-16 -> LED_WIFI
+U_ESP32-17 -> LED_MQTT
+U_ESP32-18 -> SD_SCK
+U_ESP32-19 -> SD_MISO
+U_ESP32-21 -> I2C_SDA
+U_ESP32-22 -> I2C_SCL
+U_ESP32-23 -> SD_MOSI
+U_ESP32-25 -> RELAY3_DRV
+U_ESP32-26 -> RELAY1_DRV
+U_ESP32-27 -> RELAY2_DRV
+U_ESP32-32 -> DS18B20_DATA
+U_ESP32-33 -> DHT22_DATA
+U_ESP32-35 -> VIN_SENSE
+U_ESP32-EN -> EN_ESP
+U_ESP32-BOOT -> BOOT_ESP
+U_ESP32-VCC -> +3V3_ESP
+U_ESP32-GND -> GND
+U_ESP32-GPIO0 -> BOOT_ESP
+
+# USB-UART CP2102
+U_USB_UART-1 -> GND
+U_USB_UART-2 -> DTR -> Q_RST-B
+U_USB_UART-3 -> RTS -> Q_BOOT-B
+U_USB_UART-7 -> GND
+U_USB_UART-8 -> GND
+U_USB_UART-9 -> +5V_USB
+U_USB_UART-10 -> VCC -> +3V3_ESP
+U_USB_UART-11 -> TXD -> UART_TX
+U_USB_UART-12 -> RXD -> UART_RX
+
+# Auto-Reset Transistors
+Q_RST-C -> EN_ESP
+Q_RST-B -> DTR (via R_USB_DTR)
+Q_RST-E -> GND
+Q_BOOT-C -> BOOT_ESP
+Q_BOOT-B -> RTS (via R_USB_RTS)
+Q_BOOT-E -> GND
+
+# Hardware Watchdog TPL5010
+U_WD-1 -> GND
+U_WD-2 -> WATCHDOG_RST
+U_WD-3 -> WATCHDOG_KICK
+U_WD-4 -> R_WD_RT -> GND
+U_WD-5 -> VCC -> +3V3_ESP
+U_WD-6 -> DONE -> WATCHDOG_KICK
+
+# Relay Drivers (x4)
+Q_R1-C -> RELAY1-2 (+5V_RELAY_RAW)
+Q_R1-B -> RELAY1_DRV (via R_GR1)
+Q_R1-E -> GND
+Q_R2-C -> RELAY2-2
+Q_R2-B -> RELAY2_DRV
+Q_R2-E -> GND
+Q_R3-C -> RELAY3-2
+Q_R3-B -> RELAY3_DRV
+Q_R3-E -> GND
+Q_R4-C -> RELAY4-2
+Q_R4-B -> RELAY4_DRV
+Q_R4-E -> GND
+
+# Relays (SRD-05VDC-SL-C)
+RELAY1-1 -> RELAY1_COM
+RELAY1-2 -> +5V_RELAY_RAW
+RELAY1-3 -> RELAY1_NO
+RELAY1-4 -> RELAY1_NC
+RELAY2-1 -> RELAY2_COM
+RELAY2-2 -> +5V_RELAY_RAW
+RELAY2-3 -> RELAY2_NO
+RELAY2-4 -> RELAY2_NC
+RELAY3-1 -> RELAY3_COM
+RELAY3-2 -> +5V_RELAY_RAW
+RELAY3-3 -> RELAY3_NO
+RELAY3-4 -> RELAY3_NC
+RELAY4-1 -> RELAY4_COM
+RELAY4-2 -> +5V_RELAY_RAW
+RELAY4-3 -> RELAY4_NO
+RELAY4-4 -> RELAY4_NC
+
+# Flyback Diodes
+D_FLY1-1 -> GND (cathode)
+D_FLY1-2 -> RELAY1-2 (anode) [x4 for all relays]
+
+# RC Snubbers
+F_R1_SNUB1-1 -> RELAY1_COM
+F_R1_SNUB1-2 -> RELAY1_NO [x4 for all relays]
+
+# DHT22
+U_DHT22-1 -> +3V3_ANA (VCC)
+U_DHT22-2 -> DHT22_DATA (via R_DHT_PU)
+U_DHT22-3 -> GND (NC)
+U_DHT22-4 -> GND
+R_DHT_PU-1 -> DHT22_DATA
+R_DHT_PU-2 -> +3V3_ANA
+
+# DS18B20
+U_DS18B20-1 -> GND
+U_DS18B20-2 -> DS18B20_DATA (via R_DS_PU)
+U_DS18B20-3 -> +3V3_ANA (VCC)
+R_DS_PU-1 -> DS18B20_DATA
+R_DS_PU-2 -> +3V3_ANA
+
+# ADS1115
+U_ADS-1 -> ADS_A0
+U_ADS-2 -> ADS_A1
+U_ADS-3 -> ADS_A2
+U_ADS-4 -> ADS_A3
+U_ADS-5 -> GND
+U_ADS-6 -> GND
+U_ADS-7 -> I2C_SCL
+U_ADS-8 -> I2C_SDA
+U_ADS-9 -> +3V3_ANA (VCC)
+U_ADS-10 -> GND (ADDR)
+
+# I2C Pull-ups
+R_I2C_SCL_PU-1 -> I2C_SCL
+R_I2C_SCL_PU-2 -> +3V3_ANA
+R_I2C_SDA_PU-1 -> I2C_SDA
+R_I2C_SDA_PU-2 -> +3V3_ANA
+
+# MicroSD
+U_SDCARD-1 -> GND
+U_SDCARD-2 -> SD_CS
+U_SDCARD-3 -> SD_MOSI
+U_SDCARD-4 -> GND
+U_SDCARD-5 -> SD_SCK
+U_SDCARD-6 -> GND
+U_SDCARD-7 -> SD_MISO
+U_SDCARD-8 -> GND
+U_SDCARD-9 -> NC
+
+# IO Expanders
+U_EXP1-1 -> NC
+U_EXP1-2 -> NC
+U_EXP1-3 -> GND
+U_EXP1-4 -> GND
+U_EXP1-5 -> +3V3_ESP
+U_EXP1-6 -> +3V3_ESP
+U_EXP1-7 -> GND
+U_EXP1-8 -> GND
+U_EXP1-9 -> +3V3_ESP
+U_EXP1-10 -> NC
+U_EXP1-11 -> NC
+U_EXP1-12 -> I2C_SCL
+U_EXP1-13 -> I2C_SDA
+U_EXP1-14 -> GND
+U_EXP1-15 -> NC
+U_EXP1-16 -> NC
+U_EXP1-17 -> NC
+U_EXP1-18 -> NC
+
+U_EXP2-1 -> NC
+U_EXP2-2 -> NC
+U_EXP2-3 -> GND
+U_EXP2-4 -> GND
+U_EXP2-5 -> +3V3_ESP
+U_EXP2-6 -> +3V3_ESP
+U_EXP2-7 -> GND
+U_EXP2-8 -> GND
+U_EXP2-9 -> +3V3_ESP
+U_EXP2-10 -> NC
+U_EXP2-11 -> NC
+U_EXP2-12 -> I2C_SCL
+U_EXP2-13 -> I2C_SDA
+U_EXP2-14 -> GND
+U_EXP2-15 -> NC
+U_EXP2-16 -> NC
+U_EXP2-17 -> NC
+U_EXP2-18 -> NC
+
+# ============================================================================
+# Net Class Definitions
+# ============================================================================
+
+# Power Nets
+NET +12V_IN; NetClass Power
+NET +12V_PROTECTED; NetClass Power
+NET +5V_MAIN; NetClass Power
+NET +5V_SYS; NetClass Power
+NET +5V_USB; NetClass Power
+NET +5V_RELAY_RAW; NetClass Power
+NET +3V3_MAIN; NetClass Power
+NET +3V3_ESP; NetClass Power
+NET +3V3_ANA; NetClass Power
+
+# High Voltage Nets (Relay Contacts)
+NET RELAY1_COM; NetClass HighVoltage
+NET RELAY1_NO; NetClass HighVoltage
+NET RELAY1_NC; NetClass HighVoltage
+NET RELAY2_COM; NetClass HighVoltage
+NET RELAY2_NO; NetClass HighVoltage
+NET RELAY2_NC; NetClass HighVoltage
+NET RELAY3_COM; NetClass HighVoltage
+NET RELAY3_NO; NetClass HighVoltage
+NET RELAY3_NC; NetClass HighVoltage
+NET RELAY4_COM; NetClass HighVoltage
+NET RELAY4_NO; NetClass HighVoltage
+NET RELAY4_NC; NetClass HighVoltage
+
+# Signal Nets
+NET GPIO1; NetClass Default
+NET GPIO3; NetClass Default
+NET GPIO4; NetClass Default
+NET GPIO5; NetClass Default
+NET GPIO14; NetClass Default
+NET GPIO16; NetClass Default
+NET GPIO17; NetClass Default
+NET GPIO18; NetClass Default
+NET GPIO19; NetClass Default
+NET GPIO21; NetClass Default
+NET GPIO22; NetClass Default
+NET GPIO23; NetClass Default
+NET GPIO25; NetClass Default
+NET GPIO26; NetClass Default
+NET GPIO27; NetClass Default
+NET GPIO32; NetClass Default
+NET GPIO33; NetClass Default
+NET GPIO35; NetClass Default
+
+# I2C Nets
+NET I2C_SCL; NetClass Default
+NET I2C_SDA; NetClass Default
+
+# SPI Nets
+NET SD_CS; NetClass Default
+NET SD_SCK; NetClass Default
+NET SD_MOSI; NetClass Default
+NET SD_MISO; NetClass Default
+
+# UART Nets
+NET UART_TX; NetClass Default
+NET UART_RX; NetClass Default
+NET DTR; NetClass Default
+NET RTS; NetClass Default
+
+# Analog Nets
+NET ADS_A0; NetClass Default
+NET ADS_A1; NetClass Default
+NET ADS_A2; NetClass Default
+NET ADS_A3; NetClass Default
+NET SOIL_RAW; NetClass Default
+NET VIN_SENSE; NetClass Default
+
+# Sensor Nets
+NET DHT22_DATA; NetClass Default
+NET DS18B20_DATA; NetClass Default
+
+# Control Nets
+NET WATCHDOG_KICK; NetClass Default
+NET WATCHDOG_RST; NetClass Default
+NET RELAY1_DRV; NetClass Default
+NET RELAY2_DRV; NetClass Default
+NET RELAY3_DRV; NetClass Default
+NET RELAY4_DRV; NetClass Default
+
+# Power Good / Interlock
+NET EN_ESP; NetClass Default
+NET BOOT_ESP; NetClass Default
+
+# Status LEDs
+NET LED_WIFI; NetClass Default
+NET LED_MQTT; NetClass Default
+NET LED_PWR; NetClass Default
+NET LED_ERROR; NetClass Default
+
+# Ground
+NET GND; NetClass Power
+
+# ============================================================================
+# Summary
+# ============================================================================
+
+Total Nets: 33 major nets
+Total Components: ~180 footprints
+Net Classes: 3 (Power, Default, HighVoltage)
+
+# END OF NETLIST
